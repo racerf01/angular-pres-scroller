@@ -1,7 +1,6 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { AppComponent } from './app/app.component';
-import { config } from './app/app.config.server';
+import { SlideScrollComponent } from './app/slide-scroll.component';
 
-const bootstrap = () => bootstrapApplication(AppComponent, config);
+const bootstrap = () => bootstrapApplication(SlideScrollComponent);
 
 export default bootstrap;
