@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { SlideScrollComponent } from './slide-scroll.component';
+import { SlideComponent } from './slide.component';
 
-describe('SlideScrollComponent', () => {
-  let component: SlideScrollComponent;
-  let fixture: ComponentFixture<SlideScrollComponent>;
+describe('SlideComponent', () => {
+  let component: SlideComponent;
+  let fixture: ComponentFixture<SlideComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [SlideScrollComponent]
+      imports: [SlideComponent]
     })
     .compileComponents();
     
-    fixture = TestBed.createComponent(SlideScrollComponent);
+    fixture = TestBed.createComponent(SlideComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

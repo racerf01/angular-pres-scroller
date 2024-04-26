@@ -1,5 +1,5 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { SlideScrollComponent } from './app/slide-scroll.component';
+import { SlideComponent } from './app/slide/slide.component';
 
-bootstrapApplication(SlideScrollComponent)
+bootstrapApplication(SlideComponent)
   .catch((err) => console.error(err));
