@@ -3,7 +3,8 @@
     <mat-card style="position: relative;">
     </mat-card>
     <div style="display: flex; justify-content: flex-start; width: 100%; z-index: 1;">
-      <button class="dragButton" *ngIf="isFirstSelected()" (click)="handleDragButtonClick($event)">
+      <button class="dragButton" *ngIf="isFirstSelected()" (click)="handleDragButtonClick($event)"
+      cdkDragHandle>
         <mat-icon>drag_indicator</mat-icon>
       </button>       
       <!-- Ensure the delete button only appears if there are selected cards and intercept click event to stop event propagation -->

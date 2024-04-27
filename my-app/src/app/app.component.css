@@ -1,2 +1,10 @@
-
+.cdk-drag-preview {
+    opacity: 0.75;
+    border-radius: 5px;
+  }
+  
+  .cdk-drag-placeholder {
+    opacity: 0.3;
+  }
+  
   

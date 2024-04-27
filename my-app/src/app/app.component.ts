@@ -1,4 +1,6 @@
 import { Component } from '@angular/core';
+import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
+
 
 @Component({
   selector: 'app-root',
@@ -47,6 +49,8 @@ export class AppComponent {
     // Reset the selected indices as all selected cards have been deleted
     this.selectedCardIndices = [];
   }
-  
+  drop(event: CdkDragDrop<{ title: string; content: string; selected: boolean }[]>): void {
+    moveItemInArray(this.cards, event.previousIndex, event.currentIndex);
+  }
   
 }

@@ -1,11 +1,13 @@
-<div cdkDropList [cdkDropListData]="cards" class="cards-container" 
-cdkDropListSortingDisabled style= "display: flex; flex-wrap: wrap;">
+<div cdkDropList class="cards-container" [cdkDropListData]="cards" 
+     (cdkDropListDropped)="drop($event)" style="display: flex; flex-wrap: wrap;">
   <ng-container *ngFor="let card of cards; let i = index">
-    <app-card [card]="card" 
-          (toggle)="toggleSelect(i)"
-          (deleteSelected)="deleteSelectedCards()"
-          [isFirstSelected]="isFirstSelected.bind(this, i)"
-          [isLastSelected]="isLastSelected.bind(this, i)">
-    </app-card>
+    <div cdkDrag [cdkDragData]="card">
+      <app-card [card]="card" 
+                (toggle)="toggleSelect(i)"
+                [isFirstSelected]="isFirstSelected.bind(this, i)"
+                [isLastSelected]="isLastSelected.bind(this, i)"
+                (deleteSelected)="deleteSelectedCards()">
+      </app-card>
+    </div>
   </ng-container>
 </div>
