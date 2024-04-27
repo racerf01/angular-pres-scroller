@@ -40,12 +40,25 @@ export class AppComponent {
       }
     }
   }
-  
+
+  isSelected(index: number): boolean {
+    return this.selectedCardIndices.includes(index);
+  }
+
+  isFirstSelectedCard(index: number): boolean {
+    return this.isSelected(index) && this.selectedCardIndices[0] === index;
+  }
+
+  isLastSelectedCard(index: number): boolean {
+    return this.isSelected(index) && this.selectedCardIndices[this.selectedCardIndices.length - 1] === index;
+  }
 
   drop(event: CdkDragDrop<string[]>): void {
     moveItemInArray(this.cards, event.previousIndex, event.currentIndex);
   }
 }
+
+
 
 
 

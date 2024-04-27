@@ -8,7 +8,7 @@
     <div (click)="toggleSelect(i)" cdkDrag> 
       <div style="margin: 10px; display: inline-block; text-align: center;">
         <!-- Card container -->
-        <mat-card style="position: relative;" [class.selected]="card.selected">
+        <mat-card style="position: relative;" [class.selected]="isSelected(i)">
           <mat-card-header>
             <mat-card-title>{{ card.title }}</mat-card-title>
           </mat-card-header>
@@ -17,18 +17,19 @@
             {{ card.content }}
           </mat-card-content>
         </mat-card>
-        <!-- Drag button on the left side -->
-        <button *ngIf="card.selected" mat-icon-button cdkDragHandle style="margin-right: 1em;">
+        <!-- Drag button on the left side (appear only on first selected card) -->
+        <button *ngIf="isSelected(i) && isFirstSelectedCard(i)" mat-icon-button cdkDragHandle style="margin-right: 1em;">
           <mat-icon>drag_indicator</mat-icon>
         </button>
-        <!-- Delete icon (conditionally rendered) -->
-        <button *ngIf="card.selected" mat-icon-button cdkDrag style="margin-left: 1em;">
+        <!-- Delete button (appear only on last selected card) -->
+        <button *ngIf="isSelected(i) && isLastSelectedCard(i)" mat-icon-button cdkDrag style="margin-left: 1em;">
           <mat-icon color="warn">delete</mat-icon>
         </button>
       </div>
     </div>
   </ng-container>
 </div>
+
 
 
 
