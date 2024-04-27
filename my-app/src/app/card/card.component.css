@@ -22,11 +22,18 @@ mat-card {
   border: 2px solid #B6BED2;
   border-radius: 0.5em;
   margin-top: 0.5em;
-  width: 4em; /* Adjusted to match the button sizes */
+  flex-shrink: 0; 
+  margin: 0.5em; 
+}
+
+.dragButton {
+  width: 4em;
+  margin-right: auto;
 }
 
 .deleteButton {
   width: 3em;
+  margin-left: auto;
 }
 
 mat-icon {

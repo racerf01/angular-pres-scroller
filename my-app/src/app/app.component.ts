@@ -19,20 +19,24 @@ export class AppComponent {
   toggleSelect(index: number): void {
     this.cards[index].selected = !this.cards[index].selected;
     if (this.cards[index].selected) {
-      this.selectedCardIndices.push(index); // Add index to selected indices if selected
+      this.selectedCardIndices.push(index);
     } else {
       const selectedIndex = this.selectedCardIndices.indexOf(index);
       if (selectedIndex !== -1) {
-        this.selectedCardIndices.splice(selectedIndex, 1); // Remove index from selected indices if deselected
+        this.selectedCardIndices.splice(selectedIndex, 1);
       }
     }
+    // Sort selectedCardIndices to ensure they are in ascending order based on their position in the cards array
+    this.selectedCardIndices.sort((a, b) => a - b);
   }
 
   isFirstSelected(index: number): boolean {
+    // Check if this card is the first in the sorted list of selected indices
     return this.selectedCardIndices[0] === index;
   }
 
   isLastSelected(index: number): boolean {
+    // Check if this card is the last in the sorted list of selected indices
     return this.selectedCardIndices[this.selectedCardIndices.length - 1] === index;
   }
 }
