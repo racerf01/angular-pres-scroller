@@ -1,17 +1,10 @@
-<!-- card.component.html -->
-<!-- card.component.html -->
-<div (click)="toggleSelect($event)" cdkDrag>
+<div (click)="toggleSelect($event)">
     <div style="margin: 10px; display: inline-block; text-align: center;">
       <mat-card style="position: relative;" [class.selected]="card.selected">
-        <mat-card-header>
-          <mat-card-title>{{ card.title }}</mat-card-title>
-        </mat-card-header>
-        <mat-card-content>
-          {{ card.content }}
-        </mat-card-content>
-      </mat-card>
+        
+      </mat-card>      
       <div style="display: flex; justify-content: space-between;">
-        <button *ngIf="card.selected" mat-icon-button (click)="toggleDrag($event)" cdkDragHandle>
+        <button *ngIf="card.selected" mat-icon-button cdkDragHandle>
           <mat-icon>drag_indicator</mat-icon>
         </button>
         <button *ngIf="card.selected" mat-icon-button cdkDrag>

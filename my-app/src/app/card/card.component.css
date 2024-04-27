@@ -1,8 +1,16 @@
 .selected {
-    border: 2px solid blue;
+    border: 2px solid #4E5871;
+    box-shadow: 0px 2.706px 9.471px 0px rgba(89, 15, 253, 0.20);
   }
   
-  .mat-card {
-    width: 100%; /* Ensure cards take full width of their container */
+  mat-card {
+    width: 100%;
+    border-radius: 1em;
+    border: 2px solid #B6BED2;
+    box-shadow: 0px 2.706px 9.471px 0px rgba(89, 15, 253, 0.20);
+    box-shadow: none;
+    width: 156.303px;
+    height: 113.214px;
+    background-color: white;
   }
   
