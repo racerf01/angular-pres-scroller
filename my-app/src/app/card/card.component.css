@@ -1,16 +1,33 @@
-.selected {
-    border: 2px solid #4E5871;
-    box-shadow: 0px 2.706px 9.471px 0px rgba(89, 15, 253, 0.20);
-  }
-  
-  mat-card {
-    width: 100%;
-    border-radius: 1em;
-    border: 2px solid #B6BED2;
-    box-shadow: 0px 2.706px 9.471px 0px rgba(89, 15, 253, 0.20);
-    box-shadow: none;
-    width: 156.303px;
-    height: 113.214px;
-    background-color: white;
-  }
-  
+.selected mat-card {
+  border: 2px solid #4E5871; /* Border applied to mat-card when parent is selected */
+  box-shadow: 0px 2.706px 9.471px rgba(89, 15, 253, 0.20);
+}
+
+mat-card {
+  width: 156.303px;
+  height: 113.214px;
+  border-radius: 1em;
+  background-color: white;
+  box-shadow: none;
+  border: 2px solid #4E5871;
+}
+
+.dragButton, .deleteButton {
+  display: flex;
+  justify-content: center; 
+  align-items: center;
+  background-color: #FFFFFF;
+  border: 2px solid #B6BED2;
+  border-radius: 0.5em;
+  margin-top: 0.5em;
+  width: 4em; /* Adjusted to match the button sizes */
+}
+
+.deleteButton {
+  width: 3em;
+}
+
+mat-icon {
+  color: #4E5871;
+  padding: 0;
+}
