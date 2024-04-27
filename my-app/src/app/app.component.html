@@ -1,0 +1,53 @@
+<div style="margin-bottom: 20px;">
+  <button mat-raised-button color="primary" (click)="addCard()">Add Card</button>
+</div>
+
+<div cdkDropList (cdkDropListDropped)="drop($event)" style="display: flex; flex-wrap: wrap;">
+  <ng-container *ngFor="let card of cards; let i = index">
+    <!-- Container for card -->
+    <div style="margin: 10px; display: inline-block; position: relative;">
+      <mat-card (click)="toggleSelect(i)" [class.selected]="card.selected" style="position: relative;">
+        <mat-card-header>
+          <mat-card-title>{{ card.title }}</mat-card-title>
+        </mat-card-header>
+        <!-- Card content with margin -->
+        <mat-card-content>
+          {{ card.content }}
+        </mat-card-content>
+      </mat-card>
+      <!-- Button container -->
+      <div style="bottom: 0; display: flex; justify-content: space-between; padding: 0 20px; position: absolute; width: 100%;">
+        <!-- Button for dragging the card -->
+        <button mat-icon-button cdkDragHandle style="margin-right: 5px;">
+          <mat-icon>drag_indicator</mat-icon>
+        </button>
+        <!-- Delete icon -->
+        <div *ngIf="card.selected">
+          <button mat-icon-button cdkDrag style="margin-left: 5px;">
+            <mat-icon color="warn">delete</mat-icon>
+          </button>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

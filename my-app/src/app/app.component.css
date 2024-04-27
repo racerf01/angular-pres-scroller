@@ -1,0 +1,13 @@
+.selected {
+    border: 2px solid blue;
+  }
+  
+  button[cdkDragHandle], button[color="warn"] {
+    flex: 1;  /* Each button will take equal space */
+  }
+  
+  .mat-card {
+    width: 100%; /* Ensure cards take full width of their container */
+  }
+  
+  
