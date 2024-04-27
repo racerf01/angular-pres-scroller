@@ -39,5 +39,14 @@ export class AppComponent {
     // Check if this card is the last in the sorted list of selected indices
     return this.selectedCardIndices[this.selectedCardIndices.length - 1] === index;
   }
+
+  deleteSelectedCards(): void {
+    // Filter out the selected cards
+    this.cards = this.cards.filter((_, index) => !this.selectedCardIndices.includes(index));
+  
+    // Reset the selected indices as all selected cards have been deleted
+    this.selectedCardIndices = [];
+  }
+  
   
 }

@@ -24,9 +24,9 @@ export class CardComponent {
 
   handleDeleteButtonClick(event: MouseEvent): void {
     console.log('Delete button clicked');
-    this.deleteSelected.emit();
-    event.stopPropagation();
-  }
+    this.deleteSelected.emit();  // Emit the delete event
+    event.stopPropagation();  // Prevent further propagation of the event
+  }  
 }
 
 
