@@ -44,6 +44,12 @@ export class AppComponent {
   isSelected(index: number): boolean {
     return this.selectedCardIndices.includes(index);
   }
+  
+  handleDrag(event: any): void {
+    // Implement your drag handling logic here
+    console.log('Drag event handled', event);
+  }
+  
 
   isFirstSelectedCard(index: number): boolean {
     return this.isSelected(index) && this.selectedCardIndices[0] === index;

@@ -1,32 +1,13 @@
-<div style="margin-bottom: 20px;">
-  <button mat-raised-button color="primary" (click)="addCard()">Add Card</button>
-</div>
-
 <div cdkDropList (cdkDropListDropped)="drop($event)" style="display: flex; flex-wrap: wrap;">
   <ng-container *ngFor="let card of cards; let i = index">
-    <!-- Container for card -->
-    <div (click)="toggleSelect(i)" cdkDrag> 
-      <div style="margin: 10px; display: inline-block; text-align: center;">
-        <!-- Card container -->
-        <mat-card style="position: relative;" [class.selected]="isSelected(i)">
-          <mat-card-header>
-            <mat-card-title>{{ card.title }}</mat-card-title>
-          </mat-card-header>
-          <!-- Card content -->
-          <mat-card-content>
-            {{ card.content }}
-          </mat-card-content>
-        </mat-card>
-        <!-- Drag button on the left side (appear only on first selected card) -->
-        <button *ngIf="isSelected(i) && isFirstSelectedCard(i)" mat-icon-button cdkDragHandle style="margin-right: 1em;">
-          <mat-icon>drag_indicator</mat-icon>
-        </button>
-        <!-- Delete button (appear only on last selected card) -->
-        <button *ngIf="isSelected(i) && isLastSelectedCard(i)" mat-icon-button cdkDrag style="margin-left: 1em;">
-          <mat-icon color="warn">delete</mat-icon>
-        </button>
-      </div>
-    </div>
+    <app-card [card]="card" 
+              [isSelected]="isSelected(i)"
+              [isFirstSelected]="isFirstSelectedCard(i)"
+              [isLastSelected]="isLastSelectedCard(i)"
+              (toggle)="toggleSelect(i)"
+              (delete)="deleteSelectedCards()"
+              (dragHandle)="handleDrag($event)">
+    </app-card>
   </ng-container>
 </div>
 

@@ -1,0 +1,8 @@
+.selected {
+    border: 2px solid blue;
+  }
+  
+  .mat-card {
+    width: 100%; /* Ensure cards take full width of their container */
+  }
+  
