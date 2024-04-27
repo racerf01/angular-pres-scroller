@@ -1,6 +1,7 @@
 .selected mat-card {
   border: 2px solid #4E5871; /* Border applied to mat-card when parent is selected */
   box-shadow: 0px 2.706px 9.471px rgba(89, 15, 253, 0.20);
+  z-index: 0;
 }
 
 mat-card {
@@ -12,6 +13,7 @@ mat-card {
   border: 2px solid #4E5871;
   width: 18em;
   width: 12em;
+  z-index: 0;
 }
 
 .dragButton, .deleteButton {
@@ -24,6 +26,7 @@ mat-card {
   margin-top: 0.5em;
   flex-shrink: 0; 
   margin: 0.5em; 
+  z-index: 1;
 }
 
 .dragButton {

@@ -1,15 +1,16 @@
 <div (click)="toggleSelect($event)">
-  <div style="margin: 10px; display: inline-block; text-align: center;" [class.selected]="card.selected">
+  <div style="margin: 10px; display: inline-block; text-align: center; z-index: 0;" [class.selected]="card.selected">
     <mat-card style="position: relative;">
     </mat-card>
-    <div style="display: flex; justify-content: flex-start; width: 100%;">
-      <button class="dragButton" *ngIf="isFirstSelected()">
+    <div style="display: flex; justify-content: flex-start; width: 100%; z-index: 1;">
+      <button class="dragButton" *ngIf="isFirstSelected()" (click)="handleDragButtonClick($event)">
         <mat-icon>drag_indicator</mat-icon>
-      </button>
-      <button class="deleteButton" *ngIf="isLastSelected()">
+      </button>       
+      <!-- Ensure the delete button only appears if there are selected cards and intercept click event to stop event propagation -->
+      <button class="deleteButton" *ngIf="isLastSelected()" (click)="handleDeleteButtonClick($event)">
         <mat-icon>delete</mat-icon>
-      </button>
-    </div>
+      </button>      
+    </div>  
   </div>
 </div>
 

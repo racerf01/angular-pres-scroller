@@ -39,4 +39,5 @@ export class AppComponent {
     // Check if this card is the last in the sorted list of selected indices
     return this.selectedCardIndices[this.selectedCardIndices.length - 1] === index;
   }
+  
 }
