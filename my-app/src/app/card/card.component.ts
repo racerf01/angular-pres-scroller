@@ -1,4 +1,4 @@
-import { Component, Input, EventEmitter, Output } from '@angular/core';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
 
 @Component({
   selector: 'app-card',
@@ -7,12 +7,14 @@ import { Component, Input, EventEmitter, Output } from '@angular/core';
 })
 export class CardComponent {
   @Input() card: any;
-  @Output() cardSelected = new EventEmitter<any>();
-  
+  @Input() isFirstSelected!: Function;
+  @Input() isLastSelected!: Function;
+  @Output() toggle = new EventEmitter<number>();
 
   toggleSelect(event: Event): void {
-    event.stopPropagation(); // Prevent the event from bubbling up
-    this.card.selected = !this.card.selected;
-    this.cardSelected.emit(this.card); // Emit the selected card data
+    event.stopPropagation(); // Prevent event bubbling
+    this.toggle.emit(); // Emit toggle event
   }
 }
+
+

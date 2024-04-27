@@ -1,18 +1,18 @@
 <div (click)="toggleSelect($event)">
   <div style="margin: 10px; display: inline-block; text-align: center;" [class.selected]="card.selected">
-      <!-- mat-card inside the div that can receive the selected class -->
-      <mat-card style="position: relative;">
-      </mat-card>      
-      <div style="display: flex; justify-content: space-between;">
-          <button class="dragButton" *ngIf="card.selected">
-              <mat-icon>drag_indicator</mat-icon>
-          </button>
-          <button class="deleteButton" *ngIf="card.selected">
-              <mat-icon>delete</mat-icon>
-          </button>
-      </div>
+    <mat-card style="position: relative;">
+    </mat-card>
+    <div style="display: flex; justify-content: space-between;">
+      <button class="dragButton" *ngIf="isFirstSelected()">
+        <mat-icon>drag_indicator</mat-icon>
+      </button>
+      <button class="deleteButton" *ngIf="isLastSelected()">
+        <mat-icon>delete</mat-icon>
+      </button>
+    </div>
   </div>
 </div>
+
 
 
   
