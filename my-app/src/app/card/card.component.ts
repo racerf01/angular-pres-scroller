@@ -16,9 +16,9 @@ export class CardComponent {
     event.stopPropagation(); // Prevent event bubbling
     this.toggle.emit(); // Emit toggle event
   }
+
   handleDragButtonClick(event: MouseEvent): void {
     console.log('Drag button clicked');
-    // Add any other logic here
     event.stopPropagation();  // If you want to prevent event propagation
   }
 
@@ -28,5 +28,3 @@ export class CardComponent {
     event.stopPropagation();  // Prevent further propagation of the event
   }  
 }
-
-
