@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { ChangeDetectorRef } from '@angular/core';
-import { trigger, transition, style, animate, query, stagger, animateChild } from '@angular/animations';
 
 
 
@@ -12,10 +11,15 @@ import { trigger, transition, style, animate, query, stagger, animateChild } fro
 })
 export class AppComponent {
   cards = [
-    { title: 'Card 1', content: 'Content for card 1', selected: false },
-    { title: 'Card 2', content: 'Content for card 2', selected: false },
-    { title: 'Card 3', content: 'Content for card 3', selected: false },
-    { title: 'Card 4', content: 'Content for card 4', selected: false },
+    { title: 'Card 1', selected: false },
+    { title: 'Card 2', selected: false },
+    { title: 'Card 3', selected: false },
+    { title: 'Card 4', selected: false },
+    { title: 'Card 5', selected: false },
+    { title: 'Card 6', selected: false },
+    { title: 'Card 7', selected: false },
+    { title: 'Card 8', selected: false },
+    { title: 'Card 9  ', selected: false },
     // Add more cards as needed
   ];
 

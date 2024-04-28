@@ -1,22 +1,14 @@
+.outer-container {
+  display: flex;
+  justify-content: left; /* Center contents horizontally */
+  margin-left: 1em;
+}
 
-  
-  .cdk-drag-placeholder {
-    opacity: 0;
-  }
-  
-  .cdk-drag-animating {
-    transition: transform 300ms cubic-bezier(0, 0, 0.2, 1);
-  }
-  
-  .cards-container {
-    display: flex;
-    flex-wrap: wrap;
-    min-height: 100px;
-  }
-  
-  .drag-button {
-    cursor: pointer;
-  }
-  
-  
-  
+.cards-container {
+  display: flex;
+  flex-wrap: nowrap;
+  max-width: 100%; /* Adjust maximum width as needed */
+  margin-top: 20em; /* Add padding to keep cards away from edges */
+}
+
+/* Add any additional styles for cards as needed */
