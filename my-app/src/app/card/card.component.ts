@@ -26,5 +26,5 @@ export class CardComponent {
     console.log('Delete button clicked');
     this.deleteSelected.emit();  // Emit the delete event
     event.stopPropagation();  // Prevent further propagation of the event
-  }  
+  }
 }

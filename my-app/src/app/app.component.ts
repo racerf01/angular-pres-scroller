@@ -56,6 +56,29 @@ export class AppComponent {
   }
   
   drop(event: CdkDragDrop<string[]>) {
+    // Reorder the cards array
     moveItemInArray(this.cards, event.previousIndex, event.currentIndex);
+  
+    // Update selectedCardIndices to reflect the new order of selected cards
+    this.selectedCardIndices = this.selectedCardIndices.map(index =>
+      index === event.previousIndex
+        ? event.currentIndex
+        : index > event.previousIndex && index <= event.currentIndex
+        ? index - 1
+        : index < event.previousIndex && index >= event.currentIndex
+        ? index + 1
+        : index
+    );
+  
+    this.cdr.detectChanges(); // Manually trigger change detection
   }
+  
+  
+  
+
+  onDrop(event: CdkDragDrop<string[]>) {
+    console.log('Card dropped:', event);
+  }
+  
+  
 }
