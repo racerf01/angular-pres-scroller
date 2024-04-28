@@ -1,12 +1,15 @@
-<div cdkDropList class="cards-container" [cdkDropListData]="cards" 
+<div [@cardAnimation]="cards.length" cdkDropList class="cards-container" [cdkDropListData]="cards" 
      (cdkDropListDropped)="drop($event)" style="display: flex; flex-wrap: wrap;">
   <ng-container *ngFor="let card of cards; let i = index">
-    <div cdkDrag [cdkDragData]="card">
+    <div cdkDrag [cdkDragData]="card" style="margin: 10px;">
       <app-card [card]="card" 
                 (toggle)="toggleSelect(i)"
                 [isFirstSelected]="isFirstSelected.bind(this, i)"
                 [isLastSelected]="isLastSelected.bind(this, i)"
                 (deleteSelected)="deleteSelectedCards()">
+        <div *ngIf="isFirstSelected(i)" cdkDragHandle class="drag-button">
+          <mat-icon>drag_indicator</mat-icon>
+        </div>
       </app-card>
     </div>
   </ng-container>

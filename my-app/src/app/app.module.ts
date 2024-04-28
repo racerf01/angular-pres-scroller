@@ -21,7 +21,8 @@ import { CardComponent } from './card/card.component';
     MatCardModule, 
     MatButtonModule,
     DragDropModule,
-    MatIconModule
+    MatIconModule,
+    BrowserAnimationsModule
   ],
   providers: [
     provideAnimationsAsync()
