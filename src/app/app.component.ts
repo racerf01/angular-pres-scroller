@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { ChangeDetectorRef } from '@angular/core';
+import { Renderer2 } from '@angular/core';
+
 
 @Component({
   selector: 'app-root',
@@ -21,6 +23,7 @@ export class AppComponent {
     // Add more cards as needed
   ];
 
+  
   constructor(private cdr: ChangeDetectorRef) {}
   selectedCardIndices: number[] = [];
 
@@ -55,6 +58,20 @@ export class AppComponent {
     console.log('Remaining cards:', this.cards);
   }
   
+  isCardSelected(index: number): boolean {
+    return this.selectedCardIndices.includes(index);
+  }
+  areMultipleCardsSelected(): boolean {
+    return this.selectedCardIndices.length > 1;
+  }
+  onContainerDragStarted(): void {
+    console.log('Container for wrapping selected cards is created and can be dragged.');
+  }
+  
+  
+  
+  
+
   drop(event: CdkDragDrop<string[]>) {
     // Reorder the cards array
     moveItemInArray(this.cards, event.previousIndex, event.currentIndex);

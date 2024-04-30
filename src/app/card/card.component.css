@@ -5,14 +5,12 @@
 }
 
 mat-card {
-  width: 156.303px;
-  height: 113.214px;
   border-radius: 1em;
   background-color: white;
   box-shadow: none;
   border: 2px solid #4E5871;
-  width: 18em;
-  width: 12em;
+  width: 15em;
+  height: 10em;
   z-index: 0;
 }
 
@@ -47,5 +45,5 @@ mat-icon {
   opacity: 0;
 }
 .cdk-drag-animating {
-  transition: none;
+  transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
 }

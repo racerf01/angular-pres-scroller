@@ -1,12 +1,30 @@
 <div class="outer-container">
   <div class="cards-container" cdkDropList cdkDropListOrientation="horizontal" (cdkDropListDropped)="drop($event)">
     <ng-container *ngFor="let card of cards; let i = index">
-      <app-card [card]="card"
-                (toggle)="toggleSelect(i)"
-                [isFirstSelected]="isFirstSelected.bind(this, i)"
-                [isLastSelected]="isLastSelected.bind(this, i)"
-                (deleteSelected)="deleteSelectedCards()"
-                class="app-card">
-      </app-card>
+      <div *ngIf="!isCardSelected(i) || !areMultipleCardsSelected()" class="draggable-container">
+        <app-card [card]="card"
+                  (toggle)="toggleSelect(i)"
+                  [isFirstSelected]="isFirstSelected.bind(this, i)"
+                  [isLastSelected]="isLastSelected.bind(this, i)"
+                  (deleteSelected)="deleteSelectedCards()"
+                  class="app-card">
+        </app-card>
+      </div>
     </ng-container>
+    <div *ngIf="areMultipleCardsSelected()" 
+     class="draggable-container" 
+     cdkDrag 
+     (cdkDragStarted)="onContainerDragStarted()">
+  <ng-container *ngFor="let i of selectedCardIndices">
+    <app-card [card]="cards[i]"
+              (toggle)="toggleSelect(i)"
+              [isFirstSelected]="isFirstSelected.bind(this, i)"
+              [isLastSelected]="isLastSelected.bind(this, i)"
+              (deleteSelected)="deleteSelectedCards()"
+              class="app-card">
+    </app-card>
+  </ng-container>
+</div>
+
   </div>
+</div>
