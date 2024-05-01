@@ -1,7 +1,5 @@
 import { Component } from '@angular/core';
-import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
-import { ChangeDetectorRef } from '@angular/core';
-import { Renderer2 } from '@angular/core';
+import { CdkDragDrop, CdkDragStart, moveItemInArray } from '@angular/cdk/drag-drop';
 
 
 @Component({
@@ -11,22 +9,21 @@ import { Renderer2 } from '@angular/core';
 })
 export class AppComponent {
   cards = [
-    { title: 'Card 1', selected: false },
-    { title: 'Card 2', selected: false },
-    { title: 'Card 3', selected: false },
-    { title: 'Card 4', selected: false },
-    { title: 'Card 5', selected: false },
-    { title: 'Card 6', selected: false },
-    { title: 'Card 7', selected: false },
-    { title: 'Card 8', selected: false },
-    { title: 'Card 9  ', selected: false },
+    { id: 1, selected: false },
+    { id: 2, selected: false },
+    { id: 3, selected: false },
+    { id: 4, selected: false },
+    { id: 5, selected: false },
+    { id: 6, selected: false },
+    { id: 7, selected: false },
+    { id: 8, selected: false },
+    { id: 9, selected: false },
     // Add more cards as needed
   ];
 
-  
-  constructor(private cdr: ChangeDetectorRef) {}
   selectedCardIndices: number[] = [];
-
+  isDraggableContainerEnabled = false;
+  
   toggleSelect(index: number): void {
     this.cards[index].selected = !this.cards[index].selected;
     if (this.cards[index].selected) {
@@ -40,6 +37,9 @@ export class AppComponent {
     // Sort selectedCardIndices to ensure they are in ascending order based on their position in the cards array
     this.selectedCardIndices.sort((a, b) => a - b);
   }
+  areAnyCardsSelected(): boolean {
+    return this.cards.some(card => card.selected);
+  }
 
   isFirstSelected(index: number): boolean {
     // Check if this card is the first in the sorted list of selected indices
@@ -51,26 +51,22 @@ export class AppComponent {
     return this.selectedCardIndices[this.selectedCardIndices.length - 1] === index;
   }
 
-  deleteSelectedCards(): void {
-    console.log('Deleting selected cards', this.selectedCardIndices);
-    this.cards = this.cards.filter((_, index) => !this.selectedCardIndices.includes(index));
-    this.selectedCardIndices = [];
-    console.log('Remaining cards:', this.cards);
+  onDragStarted(event: CdkDragStart): void {
+    // Ensure only one item is dragged at a time
+    this.selectedCardIndices = [parseInt(event.source.data)];
   }
-  
-  isCardSelected(index: number): boolean {
-    return this.selectedCardIndices.includes(index);
-  }
-  areMultipleCardsSelected(): boolean {
-    return this.selectedCardIndices.length > 1;
-  }
-  onContainerDragStarted(): void {
-    console.log('Container for wrapping selected cards is created and can be dragged.');
-  }
-  
-  
-  
-  
+
+
+
+
+
+
+
+
+
+
+
+
 
   drop(event: CdkDragDrop<string[]>) {
     // Reorder the cards array
@@ -86,15 +82,6 @@ export class AppComponent {
         ? index + 1
         : index
     );
-  
-    this.cdr.detectChanges(); // Manually trigger change detection
-  }
-  
-  
-  
-
-  onDrop(event: CdkDragDrop<string[]>) {
-    console.log('Card dropped:', event);
   }
   
   
