@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 import { CdkDragDrop, CdkDragStart, moveItemInArray } from '@angular/cdk/drag-drop';
 
-
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -22,57 +21,78 @@ export class AppComponent {
   ];
 
   selectedCardIndices: number[] = [];
-  isDraggableContainerEnabled = false;
-  
+  previewCards: any[] = [];
+
   toggleSelect(index: number): void {
     this.cards[index].selected = !this.cards[index].selected;
     if (this.cards[index].selected) {
       this.selectedCardIndices.push(index);
+      this.cloneSelectedCardsToPreview();
     } else {
       const selectedIndex = this.selectedCardIndices.indexOf(index);
       if (selectedIndex !== -1) {
         this.selectedCardIndices.splice(selectedIndex, 1);
+        this.removeSelectedCardsFromPreview();
       }
     }
     // Sort selectedCardIndices to ensure they are in ascending order based on their position in the cards array
     this.selectedCardIndices.sort((a, b) => a - b);
   }
+
+  addToPreview(index: number): void {
+    this.previewCards.push(this.cards[index]);
+  }
+
+  removeFromPreview(index: number): void {
+    this.previewCards = this.previewCards.filter(card => card.id !== this.cards[index].id);
+  }
+
   areAnyCardsSelected(): boolean {
     return this.cards.some(card => card.selected);
   }
 
   isFirstSelected(index: number): boolean {
-    // Check if this card is the first in the sorted list of selected indices
     return this.selectedCardIndices[0] === index;
   }
 
   isLastSelected(index: number): boolean {
-    // Check if this card is the last in the sorted list of selected indices
     return this.selectedCardIndices[this.selectedCardIndices.length - 1] === index;
   }
 
   onDragStarted(event: CdkDragStart): void {
-    // Ensure only one item is dragged at a time
     this.selectedCardIndices = [parseInt(event.source.data)];
   }
 
-
-
-
-
-
-
-
-
-
-
-
+  cloneSelectedCardsToPreview() {
+    const previewContainer = document.querySelector('.preview');
+    if (previewContainer) {
+      previewContainer.innerHTML = ''; // Clear existing preview cards
+  
+      this.selectedCardIndices.forEach(index => {
+        const cardContainer = document.querySelector(`.draggable-container:nth-child(${index + 1})`);
+        if (cardContainer) {
+          const clonedCardContainer = cardContainer.cloneNode(true) as Element;
+          clonedCardContainer.querySelectorAll('.drag-delete-buttons').forEach((el: Element) => el.remove()); // Remove drag-delete buttons
+          previewContainer.appendChild(clonedCardContainer);
+        }
+      });
+    }
+  }
+  
+  removeSelectedCardsFromPreview() {
+    const previewContainer = document.querySelector('.preview');
+    if (previewContainer) {
+      this.selectedCardIndices.forEach(index => {
+        const previewCard = previewContainer.querySelector(`.draggable-container:nth-child(${index + 1})`);
+        if (previewCard) {
+          previewCard.remove();
+        }
+      });
+    }
+  }
 
   drop(event: CdkDragDrop<string[]>) {
-    // Reorder the cards array
     moveItemInArray(this.cards, event.previousIndex, event.currentIndex);
-  
-    // Update selectedCardIndices to reflect the new order of selected cards
     this.selectedCardIndices = this.selectedCardIndices.map(index =>
       index === event.previousIndex
         ? event.currentIndex
@@ -83,6 +103,4 @@ export class AppComponent {
         : index
     );
   }
-  
-  
 }

@@ -67,3 +67,14 @@
   margin-left: auto;
 }
 
+/* -------- */
+.preview {
+  display: flex;
+  flex-direction: row; /* Display the cards in a row */
+  flex-wrap: nowrap; /* Prevent wrapping to the next line */
+}
+
+.card-preview {
+  margin-right: 10px; /* Add some space between preview cards */
+}
+
