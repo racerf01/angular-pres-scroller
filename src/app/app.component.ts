@@ -92,15 +92,37 @@ export class AppComponent {
   }
 
   drop(event: CdkDragDrop<string[]>) {
-    moveItemInArray(this.cards, event.previousIndex, event.currentIndex);
-    this.selectedCardIndices = this.selectedCardIndices.map(index =>
-      index === event.previousIndex
-        ? event.currentIndex
-        : index > event.previousIndex && index <= event.currentIndex
-        ? index - 1
-        : index < event.previousIndex && index >= event.currentIndex
-        ? index + 1
-        : index
-    );
+    // Log the order of the array before moving the cards
+    console.log('Array order before moving:', this.cards.map(card => card.id));
+  
+    // Calculate the delta between the previous and current index to determine the movement distance
+    const delta = event.currentIndex - event.previousIndex;
+  
+    // Move each selected card in the array by the same delta
+    this.selectedCardIndices.forEach((index, i) => {
+      const newIndex = index + delta;
+      // Ensure the new index is within the bounds of the array
+      if (newIndex >= 0 && newIndex < this.cards.length) {
+        // Update the position of the card in the array
+        moveItemInArray(this.cards, index, newIndex);
+        // Update the selected card index to reflect the new position
+        this.selectedCardIndices[i] = newIndex;
+      }
+    });
+  
+    // Log the order of the array after moving the cards
+    console.log('Array order after moving:', this.cards.map(card => card.id));
+  
+    // Clear selected state for all cards
+    this.cards.forEach(card => card.selected = false);
+    
+    // Set selected state only for the dragged cards
+    this.selectedCardIndices.forEach(index => {
+      this.cards[index].selected = true;
+    });
   }
+  
+  
+  
+  
 }

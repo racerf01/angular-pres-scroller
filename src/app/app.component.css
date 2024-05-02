@@ -77,4 +77,6 @@
 .card-preview {
   margin-right: 10px; /* Add some space between preview cards */
 }
-
+.cdk-drag-placeholder {
+  opacity: 0.1;
+}
