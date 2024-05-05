@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
 import { CdkDragDrop, CdkDragStart, moveItemInArray } from '@angular/cdk/drag-drop';
 
 @Component({
@@ -20,11 +20,15 @@ export class AppComponent {
     // Add more cards as needed
   ];
 
+  @ViewChild('outerContainer') outerContainerRef!: ElementRef;
+
   selectedCardIndices: number[] = [];
   previewCards: any[] = [];
 
   isDragging = false;
+  isDraggingStarted = false;
 
+  
   toggleSelect(index: number): void {
     this.cards[index].selected = !this.cards[index].selected;
     if (this.cards[index].selected) {
@@ -40,6 +44,16 @@ export class AppComponent {
     // Sort selectedCardIndices to ensure they are in ascending order based on their position in the cards array
     this.selectedCardIndices.sort((a, b) => a - b);
   }
+
+  ngAfterViewInit() {
+    // Calculate the width of the row of cards
+    const cardsContainer = this.outerContainerRef.nativeElement.querySelector('.cards-container');
+    if (cardsContainer) {
+      const cardsWidth = cardsContainer.scrollWidth;
+      // Set the width of the outer container to match the width of the row of cards
+      this.outerContainerRef.nativeElement.style.width = `${cardsWidth}px`;
+    }
+  }
   
   areAnyCardsSelected(): boolean {
     return this.cards.some(card => card.selected);
@@ -54,7 +68,7 @@ export class AppComponent {
   }
 
   onDragStarted(event: CdkDragStart): void {
-    this.isDragging = true; // Set flag when drag starts
+    this.isDraggingStarted = true; // Set flag when drag starts
     this.selectedCardIndices = [parseInt(event.source.data)];
   }
 

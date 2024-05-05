@@ -1,7 +1,8 @@
-<div class="outer-container">
+<div class="outer-container" #outerContainer>
   <div class="cards-container" cdkDropList cdkDropListOrientation="horizontal" (cdkDropListDropped)="drop($event)">
     <ng-container *ngFor="let card of cards; let i = index">
-      <div class="draggable-container" cdkDrag cdkDragBoundary=".outer-container" [cdkDragDisabled]="!card.selected">
+      <div class="draggable-container" cdkDrag [cdkDragDisabled]="!card.selected" cdkDragBoundary=".outer-container"
+           [class.dragging-started]="isDraggingStarted">
         <div class="card" [class.selected]="card.selected" [class.cdk-drag-placeholder]="isDragging && card.selected && !isFirstSelected(i)" (click)="toggleSelect(i)">
           <div class="card-content-container" style="position: relative;">
             <!-- Your card content here -->
@@ -15,6 +16,26 @@
             </button>
           </div>
         </div>
+        <div *cdkDragPlaceholder>
+          <div class="placeholder" *ngIf="areAnyCardsSelected()">
+            <ng-container *ngFor="let index of selectedCardIndices">
+              <div class="card-placeholder" *ngIf="cards[index].selected">
+                <!-- Clone card content here -->
+                <div class="card-content-container" style="position: relative;">
+                  <!-- Your card content here -->
+                </div>
+                <div class="drag-delete-buttons">
+                  <button *ngIf="isFirstSelected(i)" class="dragButton" cdkDragHandle>
+                    <mat-icon>drag_indicator</mat-icon>
+                  </button>
+                  <button *ngIf="isLastSelected(i)" class="deleteButton" (click)="deleteSelectedCards()">
+                    <mat-icon>delete</mat-icon>
+                  </button>
+                </div>
+              </div>
+            </ng-container>
+          </div>
+        </div>
         <div *cdkDragPreview>
           <div class="preview" *ngIf="areAnyCardsSelected()">
             <ng-container *ngFor="let index of selectedCardIndices">
@@ -23,6 +44,7 @@
                 <div class="card-content-container" style="position: relative;">
                   <!-- Your card content here -->
                 </div>
+                
               </div>
             </ng-container>
           </div>
