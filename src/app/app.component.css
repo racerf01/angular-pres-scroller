@@ -1,8 +1,11 @@
 .outer-container {
   display: flex;
   justify-content: left; /* Center contents horizontally */
-  margin-left: 1em;
+  margin-left: 0; /* Remove the left margin */
+  width: 100vw; /* Set width to 100% of the viewport width */
+  height: 97.5vh; /* Set height to 100% of the viewport height */
 }
+
 
 .cards-container {
   display: flex;
