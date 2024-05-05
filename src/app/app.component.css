@@ -1,17 +1,88 @@
 .outer-container {
   display: flex;
   justify-content: left; /* Center contents horizontally */
-  margin-left: 1em;
+  margin-left: 0; /* Remove the left margin */
+  width: 100vw; /* Set width to 100% of the viewport width */
+  height: 97.5vh; /* Set height to 100% of the viewport height */
 }
+
 
 .cards-container {
   display: flex;
   flex-direction: row;
   max-width: 100%; /* Adjust maximum width as needed */
-  margin-top: 20em; /* Add padding to keep cards away from edges */
+  margin-top: 18em; /* Add padding to keep cards away from edges */
 }
 
 .cards-container.cdk-drop-list-dragging .app-card:not(.cdk-drag-placeholder) {
   transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
 }
 
+/* card styling */
+.card {
+  margin: 1em; 
+  display: inline-block; 
+  text-align: center;
+  color: #4E5871;
+  padding: 0;
+}
+
+.card-content-container {
+  border-radius: 1em;
+  background-color: white;
+  box-shadow: none;
+  border: 0.15em solid #4E5871;
+  width: 15em;
+  height: 10em;
+}
+
+.selected .card-content-container {
+  border: 2px solid #4E5871; /* Border applied to mat-card when parent is selected */
+  box-shadow: 0px 2.706px 9.471px rgba(89, 15, 253, 0.20);
+  z-index: 0;
+}
+
+.drag-delete-buttons {
+  display: flex; 
+  justify-content: flex-start; 
+  width: 100%;
+}
+
+.dragButton, .deleteButton {
+  display: flex;
+  justify-content: center; 
+  align-items: center;
+  background-color: #FFFFFF;
+  border: 2px solid #B6BED2;
+  border-radius: 0.5em;
+  margin-top: 0.5em;
+  flex-shrink: 0; 
+  margin: 0.5em;
+}
+
+.dragButton {
+  width: 4em;
+  margin-right: auto;
+}
+
+.deleteButton {
+  width: 3em;
+  margin-left: auto;
+}
+
+/* -------- */
+.preview {
+  display: flex;
+  flex-direction: row; /* Display the cards in a row */
+  flex-wrap: nowrap; /* Prevent wrapping to the next line */
+}
+
+.card-preview {
+  margin-right: 10px; /* Add some space between preview cards */
+}
+.cdk-drag-placeholder {
+  opacity: 0.5;
+}
+.cdk-drag:not(.cdk-drag-dragging) {
+  transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+}
