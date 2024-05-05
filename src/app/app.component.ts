@@ -1,4 +1,4 @@
-import { Component, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
+import { Component, ViewChild, ElementRef, ViewChildren, QueryList } from '@angular/core';
 import { CdkDragDrop, CdkDragStart, moveItemInArray } from '@angular/cdk/drag-drop';
 
 @Component({
@@ -8,15 +8,15 @@ import { CdkDragDrop, CdkDragStart, moveItemInArray } from '@angular/cdk/drag-dr
 })
 export class AppComponent {
   cards = [
-    { id: 1, selected: false },
-    { id: 2, selected: false },
-    { id: 3, selected: false },
-    { id: 4, selected: false },
-    { id: 5, selected: false },
-    { id: 6, selected: false },
-    { id: 7, selected: false },
-    { id: 8, selected: false },
-    { id: 9, selected: false },
+    { id: 1, selected: false,  boundingBox: null },
+    { id: 2, selected: false,  boundingBox: null },
+    { id: 3, selected: false,  boundingBox: null },
+    { id: 4, selected: false,  boundingBox: null },
+    { id: 5, selected: false,  boundingBox: null },
+    { id: 6, selected: false,  boundingBox: null },
+    { id: 7, selected: false,  boundingBox: null },
+    { id: 8, selected: false,  boundingBox: null },
+    { id: 9, selected: false,  boundingBox: null },
     // Add more cards as needed
   ];
 
@@ -43,16 +43,6 @@ export class AppComponent {
     }
     // Sort selectedCardIndices to ensure they are in ascending order based on their position in the cards array
     this.selectedCardIndices.sort((a, b) => a - b);
-  }
-
-  ngAfterViewInit() {
-    // Calculate the width of the row of cards
-    const cardsContainer = this.outerContainerRef.nativeElement.querySelector('.cards-container');
-    if (cardsContainer) {
-      const cardsWidth = cardsContainer.scrollWidth;
-      // Set the width of the outer container to match the width of the row of cards
-      this.outerContainerRef.nativeElement.style.width = `${cardsWidth}px`;
-    }
   }
   
   areAnyCardsSelected(): boolean {
@@ -161,7 +151,65 @@ export class AppComponent {
     });
   }
   
-  
+  ///////////////////////////////////////////////
+
+  isSelecting = false;
+  initialSelection: { x: number, y: number } | null = null;
+  selectionBox = { left: 0, top: 0, width: 0, height: 0 };
+
+  @ViewChild('outerContainer') outerContainer!: ElementRef;
+  @ViewChildren('cardElement') cardElements!: QueryList<ElementRef>;
+
+
+  constructor(private readonly elementRef: ElementRef) {}
+
+  onMouseDown(event: MouseEvent): void {
+    this.isSelecting = true;
+    this.initialSelection = { x: event.clientX, y: event.clientY };
+  }
+
+  onMouseMove(event: MouseEvent): void {
+    if (this.isSelecting && this.initialSelection) {
+      const containerRect = this.elementRef.nativeElement.getBoundingClientRect();
+      const left = Math.min(event.clientX, this.initialSelection.x) - containerRect.left;
+      const top = Math.min(event.clientY, this.initialSelection.y) - containerRect.top;
+      const width = Math.abs(event.clientX - this.initialSelection.x);
+      const height = Math.abs(event.clientY - this.initialSelection.y);
+      this.selectionBox = { left, top, width, height };
+    }
+  }
+
+  onMouseUp(): void {
+    if (this.isSelecting) {
+      // Reset selection box
+      this.selectionBox = { left: 0, top: 0, width: 0, height: 0 };
+      this.isSelecting = false;
+      this.initialSelection = null;
+
+      // Update card selection based on intersection with selection box
+      this.cards.forEach(card => {
+        if (card.boundingBox && this.intersects(this.selectionBox, card.boundingBox)) {
+          card.selected = true;
+        }
+      });
+    }
+  }
+
+  ngAfterViewInit(): void {
+    // Initialize card bounding boxes after view initialization
+    this.cardElements.forEach((element, index) => {
+      this.cards[index].boundingBox = element.nativeElement.getBoundingClientRect();
+    });
+  }
+
+  intersects(rect1: { left: number; top: number; width: number; height: number; }, rect2: { left: number; top: number; width: number; height: number; }): boolean {
+    return (
+      rect1.left < (rect2.left + rect2.width) &&
+      (rect1.left + rect1.width) > rect2.left &&
+      rect1.top < (rect2.top + rect2.height) &&
+      (rect1.top + rect1.height) > rect2.top
+    );
+  }
   
   
 }
