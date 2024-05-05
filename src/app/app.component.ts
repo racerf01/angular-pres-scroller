@@ -23,6 +23,8 @@ export class AppComponent {
   selectedCardIndices: number[] = [];
   previewCards: any[] = [];
 
+  isDragging = false;
+
   toggleSelect(index: number): void {
     this.cards[index].selected = !this.cards[index].selected;
     if (this.cards[index].selected) {
@@ -52,6 +54,7 @@ export class AppComponent {
   }
 
   onDragStarted(event: CdkDragStart): void {
+    this.isDragging = true; // Set flag when drag starts
     this.selectedCardIndices = [parseInt(event.source.data)];
   }
 

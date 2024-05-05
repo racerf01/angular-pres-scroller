@@ -1,8 +1,8 @@
 <div class="outer-container">
   <div class="cards-container" cdkDropList cdkDropListOrientation="horizontal" (cdkDropListDropped)="drop($event)">
     <ng-container *ngFor="let card of cards; let i = index">
-      <div class="draggable-container" cdkDrag cdkDragBoundary=".outer-container" [cdkDragDisabled]="!card.selected">
-        <div class="card" [class.selected]="card.selected" (click)="toggleSelect(i)">
+      <div class="draggable-container" cdkDrag [cdkDragBoundary]="'outer-container'" [cdkDragDisabled]="!card.selected">
+        <div class="card" [class.selected]="card.selected" [class.cdk-drag-placeholder]="isDragging && card.selected && !isFirstSelected(i)" (click)="toggleSelect(i)">
           <div class="card-content-container" style="position: relative;">
             <!-- Your card content here -->
           </div>
