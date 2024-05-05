@@ -95,7 +95,7 @@
   opacity: 0.5;
 }
 
-.dragging-started .card.selected:not(.first-selected) {
+.hide-selected .card.selected {
   display: none;
 }
 

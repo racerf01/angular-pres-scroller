@@ -27,8 +27,8 @@ export class AppComponent {
 
   isDragging = false;
   isDraggingStarted = false;
+  firstSelectedIndex: number | null = null;
 
-  
   toggleSelect(index: number): void {
     this.cards[index].selected = !this.cards[index].selected;
     if (this.cards[index].selected) {
@@ -70,6 +70,23 @@ export class AppComponent {
   onDragStarted(event: CdkDragStart): void {
     this.isDraggingStarted = true; // Set flag when drag starts
     this.selectedCardIndices = [parseInt(event.source.data)];
+    this.setFirstSelectedIndex(); // Set the index of the first selected card
+  }
+  
+  setFirstSelectedIndex() {
+    if (this.selectedCardIndices.length > 0) {
+      this.firstSelectedIndex = this.selectedCardIndices[0];
+    }
+  }
+  
+  // Add a method to reset the dragging flag and first selected index when dragging ends
+  onDragEnded(): void {
+    this.isDraggingStarted = false;
+    this.firstSelectedIndex = null;
+  }
+
+  resetFirstSelectedIndex() {
+    this.firstSelectedIndex = null;
   }
 
   cloneSelectedCardsToPreview() {
