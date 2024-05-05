@@ -15,7 +15,7 @@ import { MatIconModule } from '@angular/material/icon';
     BrowserModule,
     BrowserAnimationsModule,
     DragDropModule,
-    MatIconModule,
+    MatIconModule
   ],
   providers: [
     provideAnimationsAsync()
