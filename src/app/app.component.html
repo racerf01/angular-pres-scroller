@@ -10,7 +10,7 @@
             <button *ngIf="isFirstSelected(i)" class="dragButton" cdkDragHandle>
               <mat-icon>drag_indicator</mat-icon>
             </button>
-            <button *ngIf="isLastSelected(i)" class="deleteButton">
+            <button *ngIf="isLastSelected(i)" class="deleteButton" (click)="deleteSelectedCards()">
               <mat-icon>delete</mat-icon>
             </button>
           </div>

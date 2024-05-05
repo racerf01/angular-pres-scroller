@@ -38,15 +38,7 @@ export class AppComponent {
     // Sort selectedCardIndices to ensure they are in ascending order based on their position in the cards array
     this.selectedCardIndices.sort((a, b) => a - b);
   }
-
-  addToPreview(index: number): void {
-    this.previewCards.push(this.cards[index]);
-  }
-
-  removeFromPreview(index: number): void {
-    this.previewCards = this.previewCards.filter(card => card.id !== this.cards[index].id);
-  }
-
+  
   areAnyCardsSelected(): boolean {
     return this.cards.some(card => card.selected);
   }
@@ -90,6 +82,19 @@ export class AppComponent {
       });
     }
   }
+
+  deleteSelectedCards() {
+    // Remove selected cards from the array
+    this.selectedCardIndices.sort((a, b) => b - a); // Sort indices in descending order to prevent index shifting
+    this.selectedCardIndices.forEach(index => {
+      this.cards.splice(index, 1);
+    });
+  
+    // Clear selected indices array and update preview
+    this.selectedCardIndices = [];
+    this.removeSelectedCardsFromPreview();
+  }
+  
 
   drop(event: CdkDragDrop<string[]>) {
     // Log the order of the array before moving the cards
