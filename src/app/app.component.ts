@@ -1,13 +1,20 @@
 import { Component, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
 import { CdkDragDrop, CdkDragStart, moveItemInArray } from '@angular/cdk/drag-drop';
 
+
+interface Card {
+  id: number;
+  selected: boolean;
+  selectedByDTS?: boolean; // Add the selectedByDTS property as an optional boolean
+}
+
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  cards = [
+  cards: Card[] = [
     { id: 1, selected: false },
     { id: 2, selected: false },
     { id: 3, selected: false },
@@ -30,8 +37,10 @@ export class AppComponent {
   firstSelectedIndex: number | null = null;
 
   toggleSelect(index: number): void {
-    this.cards[index].selected = !this.cards[index].selected;
-    if (this.cards[index].selected) {
+    const card = this.cards[index];
+    card.selected = !card.selected;
+    card.selectedByDTS = !card.selectedByDTS; // Toggle selectedByDTS property
+    if (card.selected) {
       this.selectedCardIndices.push(index);
       this.cloneSelectedCardsToPreview();
     } else {
@@ -44,6 +53,7 @@ export class AppComponent {
     // Sort selectedCardIndices to ensure they are in ascending order based on their position in the cards array
     this.selectedCardIndices.sort((a, b) => a - b);
   }
+  
 
   ngAfterViewInit() {
     // Calculate the width of the row of cards

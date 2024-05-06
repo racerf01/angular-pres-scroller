@@ -1,11 +1,18 @@
-<dts-select-container #container="dts-select-container"
-[(selectedItems)]="selectedCardIndices">
-  <div class="outer-container" #outerContainer >
+<dts-select-container #container="dts-select-container">
+  <div class="outer-container" #outerContainer>
     <div class="cards-container" cdkDropList cdkDropListOrientation="horizontal" (cdkDropListDropped)="drop($event)">
-      <ng-container [dtsSelectItem]="card" *ngFor="let card of cards; let i = index">
-        <div class="draggable-container" cdkDrag [cdkDragDisabled]="!card.selected" cdkDragBoundary=".outer-container"
-      [class.hide-selected]="isDraggingStarted && i !== firstSelectedIndex">
-          <div class="card" [class.selected]="card.selected" [class.cdk-drag-placeholder]="isDragging && card.selected && !isFirstSelected(i)" (click)="toggleSelect(i)">
+      <ng-container *ngFor="let card of cards; let i = index">
+        <div class="draggable-container"
+             cdkDrag
+             [dtsSelectItem]="card"
+             [cdkDragDisabled]="!card.selected"
+             cdkDragBoundary=".outer-container"
+             [class.hide-selected]="isDraggingStarted && i !== firstSelectedIndex"
+             [class.selected-by-dts]="card.selectedByDTS">
+          <div class="card"
+               [class.selected]="selectedCardIndices.includes(i)"
+               [class.cdk-drag-placeholder]="isDragging && selectedCardIndices.includes(i) && !isFirstSelected(i)"
+               (click)="toggleSelect(i)">
             <div class="card-content-container" style="position: relative;">
               <!-- Your card content here -->
             </div>

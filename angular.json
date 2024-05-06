@@ -37,7 +37,7 @@
             "styles": [
               "@angular/material/prebuilt-themes/indigo-pink.css",
               "src/styles.css",
-              "node_modules/ngx-drag-to-select/ngx-drag-to-select.css"
+              "src/ngx-drag-to-select.css"
               
             ],
             "scripts": [],
