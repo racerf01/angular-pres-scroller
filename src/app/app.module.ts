@@ -5,6 +5,7 @@ import { AppComponent } from './app.component';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { MatIconModule } from '@angular/material/icon';
+import { DragToSelectModule } from 'ngx-drag-to-select';
 
 
 @NgModule({
@@ -15,7 +16,8 @@ import { MatIconModule } from '@angular/material/icon';
     BrowserModule,
     BrowserAnimationsModule,
     DragDropModule,
-    MatIconModule
+    MatIconModule,
+    [DragToSelectModule.forRoot()]
   ],
   providers: [
     provideAnimationsAsync()
