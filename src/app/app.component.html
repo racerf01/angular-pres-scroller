@@ -1,18 +1,19 @@
-<dts-select-container #container="dts-select-container">
+<dts-select-container 
+[selectOnDrag]="true"
+[selectOnClick]="true">
   <div class="outer-container" #outerContainer>
     <div class="cards-container" cdkDropList cdkDropListOrientation="horizontal" (cdkDropListDropped)="drop($event)">
       <ng-container *ngFor="let card of cards; let i = index">
         <div class="draggable-container"
              cdkDrag
-             [dtsSelectItem]="card"
              [cdkDragDisabled]="!card.selected"
              cdkDragBoundary=".outer-container"
-             [class.hide-selected]="isDraggingStarted && i !== firstSelectedIndex"
-             [class.selected-by-dts]="card.selectedByDTS">
+             [class.hide-selected]="isDraggingStarted && i !== firstSelectedIndex">
           <div class="card"
                [class.selected]="selectedCardIndices.includes(i)"
                [class.cdk-drag-placeholder]="isDragging && selectedCardIndices.includes(i) && !isFirstSelected(i)"
-               (click)="toggleSelect(i)">
+               (click)="toggleSelect(i)"
+               [dtsSelectItem]="card">
             <div class="card-content-container" style="position: relative;">
               <!-- Your card content here -->
             </div>

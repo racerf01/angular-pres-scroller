@@ -3,12 +3,11 @@
 }
 
 .dts-select-box {
-  background: #5A0FFD;
-  border: 2px solid currentColor;
+  background: rgba(74, 67, 232, 0.08);
+  border: 2px solid #5A0FFD;
   contain: layout;
   transform: translateZ(0);
   box-sizing: border-box;
-  color: #5A0FFD;
   position: absolute;
   left: 0;
   top: 0;
@@ -19,14 +18,12 @@
   z-index: 1;
 }
 .dts-select-box.dts-removing {
-  background: rgba(125, 218, 252, 0.3);
-  border: 2px solid #7ddafc;
+  
 }
 
 .dts-select-container:not(.dts-custom) .dts-select-item.selected {
-  border: 1px solid #d2d2d2;
-  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.1);
+  
 }
 .dts-select-container:not(.dts-custom) .dts-select-item.dts-range-start {
-  border: 1px solid #2196f3;
+  
 }

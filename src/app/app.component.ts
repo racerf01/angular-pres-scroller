@@ -5,7 +5,6 @@ import { CdkDragDrop, CdkDragStart, moveItemInArray } from '@angular/cdk/drag-dr
 interface Card {
   id: number;
   selected: boolean;
-  selectedByDTS?: boolean; // Add the selectedByDTS property as an optional boolean
 }
 
 @Component({
@@ -36,10 +35,11 @@ export class AppComponent {
   isDraggingStarted = false;
   firstSelectedIndex: number | null = null;
 
+  selectOnDrag = true;
+
   toggleSelect(index: number): void {
     const card = this.cards[index];
     card.selected = !card.selected;
-    card.selectedByDTS = !card.selectedByDTS; // Toggle selectedByDTS property
     if (card.selected) {
       this.selectedCardIndices.push(index);
       this.cloneSelectedCardsToPreview();
