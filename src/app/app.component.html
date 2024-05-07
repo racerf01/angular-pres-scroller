@@ -1,66 +1,31 @@
-<dts-select-container 
-[selectOnDrag]="true"
-[selectOnClick]="true">
-  <div class="outer-container" #outerContainer>
-    <div class="cards-container" cdkDropList cdkDropListOrientation="horizontal" (cdkDropListDropped)="drop($event)">
+<div class="outer-container" #outerContainer>
+  <dts-select-container 
+  (select)="onSelectionChange($event)"
+  [selectOnDrag]="true"
+  [selectOnClick]="true" 
+  [dragOverItems]="false">
+    <div class="cards-container" cdkDropList cdkDropListOrientation="horizontal">
       <ng-container *ngFor="let card of cards; let i = index">
-        <div class="draggable-container"
-             cdkDrag
-             [cdkDragDisabled]="!card.selected"
-             cdkDragBoundary=".outer-container"
-             [class.hide-selected]="isDraggingStarted && i !== firstSelectedIndex">
-          <div class="card"
-               [class.selected]="selectedCardIndices.includes(i)"
-               [class.cdk-drag-placeholder]="isDragging && selectedCardIndices.includes(i) && !isFirstSelected(i)"
-               (click)="toggleSelect(i)"
-               [dtsSelectItem]="card">
-            <div class="card-content-container" style="position: relative;">
-              <!-- Your card content here -->
-            </div>
-            <div class="drag-delete-buttons">
-              <button *ngIf="isFirstSelected(i)" class="dragButton" cdkDragHandle>
-                <mat-icon>drag_indicator</mat-icon>
-              </button>
-              <button *ngIf="isLastSelected(i)" class="deleteButton" (click)="deleteSelectedCards()">
-                <mat-icon>delete</mat-icon>
-              </button>
+          <div class="draggable-container"
+              cdkDrag
+              cdkDragBoundary=".outer-container"
+              [dtsSelectItem]="card"
+              [class.selected]="card.selected">
+            <div class="card">
+              <div class="card-content-container" style="position: relative;">
+                <!-- Your card content here -->
+              </div>
+              <div class="drag-delete-buttons">
+                <button class="dragButton" cdkDragHandle *ngIf="isFirstSelected(i)">
+                  <img class="dragButton-icon" src="../assets/drag-button-icon.svg" style="width: 75%; height: 75%;">
+                </button>
+                <button class="deleteButton" *ngIf="isLastSelected(i)">
+                  <img class="deleteButton-icon" src="../assets/delete-button-icon.svg">
+                </button>
+              </div>
             </div>
           </div>
-          <div *cdkDragPlaceholder>
-            <div class="placeholder" *ngIf="areAnyCardsSelected()">
-              <ng-container *ngFor="let index of selectedCardIndices">
-                <div class="card-placeholder" *ngIf="cards[index].selected">
-                  <!-- Clone card content here -->
-                  <div class="card-content-container" style="position: relative;">
-                    <!-- Your card content here -->
-                  </div>
-                  <div class="drag-delete-buttons">
-                    <button *ngIf="isFirstSelected(i)" class="dragButton" cdkDragHandle>
-                      <mat-icon>drag_indicator</mat-icon>
-                    </button>
-                    <button *ngIf="isLastSelected(i)" class="deleteButton" (click)="deleteSelectedCards()">
-                      <mat-icon>delete</mat-icon>
-                    </button>
-                  </div>
-                </div>
-              </ng-container>
-            </div>
-          </div>
-          <div *cdkDragPreview>
-            <div class="preview" *ngIf="areAnyCardsSelected()">
-              <ng-container *ngFor="let index of selectedCardIndices">
-                <div class="card-preview" *ngIf="cards[index].selected">
-                  <!-- Clone card content here -->
-                  <div class="card-content-container" style="position: relative;">
-                    <!-- Your card content here -->
-                  </div>
-                  
-                </div>
-              </ng-container>
-            </div>
-          </div>
-        </div>
       </ng-container>
     </div>
-  </div>
-</dts-select-container>
+  </dts-select-container>
+</div>
