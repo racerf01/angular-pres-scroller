@@ -1,8 +1,8 @@
-import { Component, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
+import { Component, ViewChild, ElementRef, AfterViewInit, Renderer2, HostListener } from '@angular/core';
 import { CdkDragDrop, CdkDragStart, moveItemInArray } from '@angular/cdk/drag-drop';
 import {MatCardModule} from '@angular/material/card';
 import { SelectContainerComponent } from 'ngx-drag-to-select';
-
+import 'smoothscroll-polyfill';
 
 interface Card {
   id: number;
@@ -29,6 +29,28 @@ export class AppComponent {
     { id: 9, title: "Slide 9", selected: false },
     // Add more cards as needed
   ];
+
+  @HostListener('wheel', ['$event']) onMouseWheel(event: WheelEvent) {
+    console.log('Mouse wheel event:', event);
+
+    if (event.deltaY !== 0) {
+      event.preventDefault();
+      this.scrollHorizontally(event.deltaY);
+    }
+  }
+
+  private scrollHorizontally(deltaY: number) {
+    const element = document.querySelector('html'); // Select your scrollable element by class or id
+    
+    if (element) {
+      element.scrollBy({
+        left: deltaY,
+        behavior: 'smooth' // This will now work across all browsers, including those that don't support smooth scrolling natively
+      });
+    }
+  }
+  
+
 
   selectedCardIndices: number[] = [];
 

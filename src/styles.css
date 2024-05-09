@@ -6,7 +6,7 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 body {
     --dot-bg: #FEFEFE;
     --dot-color: #DEE4F1;
-    --dot-size: 1.5px;
+    --dot-size: 2px;
     --dot-space: 22px;
       background:
           linear-gradient(90deg, var(--dot-bg) calc(var(--dot-space) - var(--dot-size)), transparent 1%) center / var(--dot-space) var(--dot-space),
@@ -14,9 +14,7 @@ body {
           var(--dot-color);
   }
 
-  html {
-    overflow: auto;
+  body {
+    overflow-x: scroll;
     overflow-y: hidden;
   }
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }

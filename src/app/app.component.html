@@ -1,4 +1,4 @@
-<div class="outer-container" #outerContainer cdkScrollable>
+<div class="outer-container" cdkScrollable>
   <dts-select-container 
   (select)="onSelectionChange($event)"
   [selectOnDrag]="true"
@@ -9,9 +9,11 @@
       <ng-container *ngFor="let card of cards; let i = index">
           <div class="draggable-container"
               cdkDrag
-              cdkDragBoundary=".outer-container"
+              cdkDragBoundary=".cards-container"
+              [cdkDragDisabled]="!card.selected"
               [dtsSelectItem]="card"
-              [class.selected]="card.selected">
+              [class.selected]="card.selected"
+              >
             <div class="card">
               <div class="card-content-container" style="position: relative;">
                 <!-- Your card content here -->
