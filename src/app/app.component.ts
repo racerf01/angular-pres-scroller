@@ -46,6 +46,7 @@ export class AppComponent {
             const card = this.cards[index];
             card.selected = true;
             this.selectedCardIndices.push(index); // Add index to selectedCardIndices
+            // this.cloneSelectedCardsToPreview(); 
         }
     });
 

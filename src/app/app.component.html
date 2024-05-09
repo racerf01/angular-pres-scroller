@@ -1,9 +1,10 @@
-<div class="outer-container" #outerContainer>
+<div class="outer-container" #outerContainer cdkScrollable>
   <dts-select-container 
   (select)="onSelectionChange($event)"
   [selectOnDrag]="true"
   [selectOnClick]="true" 
-  [dragOverItems]="false">
+  [dragOverItems]="false"
+  style="position: absolute;">
     <div class="cards-container" cdkDropList cdkDropListOrientation="horizontal">
       <ng-container *ngFor="let card of cards; let i = index">
           <div class="draggable-container"

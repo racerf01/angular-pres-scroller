@@ -7,6 +7,8 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
 import { MatIconModule } from '@angular/material/icon';
 import {MatCardModule} from '@angular/material/card';
 import { DragToSelectModule } from 'ngx-drag-to-select';
+import {ScrollingModule} from '@angular/cdk/scrolling';
+
 
 
 @NgModule({
@@ -19,7 +21,8 @@ import { DragToSelectModule } from 'ngx-drag-to-select';
     DragDropModule,
     MatIconModule,
     MatCardModule,
-    [DragToSelectModule.forRoot()]
+    [DragToSelectModule.forRoot()],
+    ScrollingModule
   ],
   providers: [
     provideAnimationsAsync()

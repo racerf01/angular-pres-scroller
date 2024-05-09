@@ -4,7 +4,9 @@
   display: flex;
   justify-content: left; /* Center contents horizontally */
   margin-left: 0; /* Remove the left margin */
-  height: 97.5vh; 
+  height: 100%;
+  overflow-y: scroll; 
+  overflow-x: scroll;
 }
 
 
@@ -13,7 +15,7 @@
   flex-direction: row;
   max-width: 100%; /* Adjust maximum width as needed */
   margin-top: 18em; /* Add padding to keep cards away from edges */
-  margin-bottom: 16em;
+  margin-bottom: 16em; 
 }
 
 /* card styling */
@@ -55,18 +57,18 @@
   margin-top: 0.5em;
   flex-shrink: 0; 
   margin: 0.5em;
-  height: 3em;
+  height: 2.5em;
 }
 
 .dragButton {
-  width: 5em;
+  width: 4.5em;
   margin-right: auto;
   position: relative;
   right: 0.5em;
 }
 
 .deleteButton {
-  width: 3em;
+  width: 2.5em;
   margin-left: auto;
   position: relative;
   left: 0.5em;
@@ -86,8 +88,12 @@
 .card-preview {
   margin: 1em;  /* Add some space between preview cards */
 }
-.cdk-drag:not(.cdk-drag-dragging) {
-  transition: transform 300ms cubic-bezier(0, 0, 0.2, 1);
+
+.cdk-drag-animating {
+  transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+}
+.cards-container.cdk-drop-list-dragging .draggable-container:not(.cdk-drag-placeholder) {
+  transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
 }
 /* ----------- */
 
