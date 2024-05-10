@@ -26,7 +26,6 @@
     "express": "^4.18.2",
     "ngx-drag-to-select": "^5.0.1",
     "rxjs": "~7.8.0",
-    "smoothscroll-polyfill": "^0.4.4",
     "tslib": "^2.3.0",
     "zone.js": "~0.14.3"
   },
