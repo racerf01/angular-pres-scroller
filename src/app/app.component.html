@@ -6,7 +6,7 @@
   [dragOverItems]="false"
   [selectMode]="false"
   [custom]="true"
-  [selectWithShortcut]="false"
+  [selectWithShortcut]="true"
   style="position: absolute;">
     <div class="cards-container" cdkDropList cdkDropListOrientation="horizontal" (cdkDropListDropped)="drop($event)">
       <ng-container *ngFor="let card of cards; let i = index">
@@ -23,14 +23,14 @@
               </div>
               <div class="drag-delete-buttons" *ngIf="areAnyCardsSelected()">
                 <button class="dragButton" cdkDragHandle *ngIf="isFirstSelected(i)">
-                  <img class="dragButton-icon" src="/src/assets/drag-button-icon.svg" style="width: 75%; height: 75%;">
+                  <img class="dragButton-icon" src="assets/drag-button-icon.svg" style="width: 75%; height: 75%;">
                 </button>
                 <button class="deleteButton" *ngIf="isLastSelected(i)" (click)="deleteSelectedCards()">
-                  <img class="deleteButton-icon" src="/src/assets/delete-button-icon.svg">
+                  <img class="deleteButton-icon" src="assets/delete-button-icon.svg">
                 </button>
               </div>
             </div>
-            <!-- <div *cdkDragPreview>
+            <div *cdkDragPreview>
               <div class="preview">
                 <ng-container *ngFor="let index of selectedCardIndices">
                   <div class="card-preview" *ngIf="cards[index].selected">
@@ -39,7 +39,7 @@
                   </div>
                 </ng-container>
               </div>
-            </div> -->
+            </div>
           </div>
       </ng-container>
     </div>
