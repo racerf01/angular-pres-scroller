@@ -2,6 +2,7 @@ import { Component, ViewChild, ElementRef, AfterViewInit, Renderer2, HostListene
 import { CdkDragDrop, CdkDragStart, moveItemInArray } from '@angular/cdk/drag-drop';
 import {MatCardModule} from '@angular/material/card';
 import { SelectContainerComponent } from 'ngx-drag-to-select';
+import 'smoothscroll-polyfill';
 
 interface Card {
   id: number;
