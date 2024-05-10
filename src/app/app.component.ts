@@ -181,50 +181,65 @@ export class AppComponent {
       const cardElement = document.querySelector(`.draggable-container:nth-child(${index + 1}) .card`);
       if (cardElement) {
         this.renderer.addClass(cardElement, 'selected-card-dragging');
+        
+        // Hide the delete button when dragging starts
+        const deleteButton = cardElement.querySelector('.deleteButton');
+        if (deleteButton) {
+          this.renderer.addClass(deleteButton, 'hide-delete-button');
+        }
       }
     });
   }
-
+  
   onDragEnded() {
-    // Remove the opacity style when drag ends
+    // Remove the opacity style and show the delete button when drag ends
     const selectedCardElements = document.querySelectorAll('.selected-card-dragging');
     selectedCardElements.forEach(element => {
       this.renderer.removeClass(element, 'selected-card-dragging');
+      
+      // Show the delete button
+      const deleteButton = element.querySelector('.deleteButton');
+      if (deleteButton) {
+        this.renderer.removeClass(deleteButton, 'hide-delete-button');
+      }
     });
   }
+  
 
 /////////////////////////////////////////////////////////////////////////////////////////// 
 
-  drop(event: CdkDragDrop<string[]>) {
-    // Log the order of the array before moving the cards
-    console.log('Array order before moving:', this.cards.map(card => card.id));
+drop(event: CdkDragDrop<string[]>) {
+  // Log the order of the array before moving the cards
+  console.log('Array order before moving:', this.cards.map(card => card.id));
+
+  // Calculate the delta between the previous and current index to determine the movement distance
+  const delta = event.currentIndex - event.previousIndex;
+
+  // Move each selected card in the array by the same delta
+  this.selectedCardIndices.forEach((index, i) => {
+    const newIndex = index + delta;
+    // Ensure the new index is within the bounds of the array
+    if (newIndex >= 0 && newIndex < this.cards.length) {
+      // Update the position of the card in the array
+      moveItemInArray(this.cards, index, newIndex);
+      // Update the selected card index to reflect the new position
+      this.selectedCardIndices[i] = newIndex;
+    }
+  });
+
+  // Log the order of the array after moving the cards
+  console.log('Array order after moving:', this.cards.map(card => card.id));
+
+  // Clear selected state for all cards
+  this.cards.forEach(card => card.selected = false);
   
-    // Calculate the delta between the previous and current index to determine the movement distance
-    const delta = event.currentIndex - event.previousIndex;
-  
-    // Move each selected card in the array by the same delta
-    this.selectedCardIndices.forEach((index, i) => {
-      const newIndex = index + delta;
-      // Ensure the new index is within the bounds of the array
-      if (newIndex >= 0 && newIndex < this.cards.length) {
-        // Update the position of the card in the array
-        moveItemInArray(this.cards, index, newIndex);
-        // Update the selected card index to reflect the new position
-        this.selectedCardIndices[i] = newIndex;
-      }
-    });
-  
-    // Log the order of the array after moving the cards
-    console.log('Array order after moving:', this.cards.map(card => card.id));
-  
-    // Clear selected state for all cards
-    this.cards.forEach(card => card.selected = false);
-    
-    // Set selected state only for the dragged cards
-    this.selectedCardIndices.forEach(index => {
-      this.cards[index].selected = true;
-    });
-  }
+  // Set selected state only for the dragged cards
+  this.selectedCardIndices.forEach(index => {
+    this.cards[index].selected = true;
+  });
+}
+
+
 
   ///////////////////////////////////////////////
 

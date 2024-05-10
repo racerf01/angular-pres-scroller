@@ -104,8 +104,12 @@
   margin-left: 1em;
 }
 
-.selected-card-dragging {
+.selected-card-dragging  {
   opacity: 0;
+}
+
+.hide-delete-button {
+  display: none;
 }
 
 .cdk-drag-animating {
@@ -113,22 +117,6 @@
 }
 .cards-container.cdk-drop-list-dragging .draggable-container:not(.cdk-drag-placeholder) {
   transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
-}
-/* ----------- */
-
-.placeholder {
-  display: flex;
-  flex-direction: row; /* Display the cards in a row */
-  flex-wrap: nowrap; /* Prevent wrapping to the next line */
-}
-
-.card-placeholder {
-  margin: 1em; 
-  opacity: 0.5;
-}
-
-.hide-selected .card.selected {
-  display: none;
 }
 
 /* ------------------- */
