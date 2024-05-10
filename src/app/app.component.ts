@@ -1,5 +1,5 @@
 import { Component, ViewChild, ElementRef, AfterViewInit, Renderer2, HostListener } from '@angular/core';
-import { CdkDragDrop, CdkDragStart, moveItemInArray } from '@angular/cdk/drag-drop';
+import { CdkDragDrop, CdkDragStart, CdkDragEnd, moveItemInArray } from '@angular/cdk/drag-drop';
 import {MatCardModule} from '@angular/material/card';
 import { SelectContainerComponent } from 'ngx-drag-to-select';
 import 'smoothscroll-polyfill';
@@ -128,6 +128,16 @@ export class AppComponent {
     return this.cards.some(card => card.selected);
   }
 
+  shouldDisplayButtonUnderFirstCard(): boolean {
+    // Check if any cards are selected
+    if (this.areAnyCardsSelected()) {
+      // Check if the first selected card index is equal to the current index
+      return this.selectedCardIndices[0] === 0;
+    }
+    return false;
+  }
+  
+
   cloneSelectedCardsToPreview() {
     try {
         const previewContainer = document.querySelector('.preview');
@@ -162,6 +172,28 @@ export class AppComponent {
   }
 
   /////////////////////////////////////////////////////////////////////////////////
+
+  constructor(private renderer: Renderer2) {}
+
+  onDragStarted(event: CdkDragStart) {
+    // Set the opacity of selected cards to 0 during drag
+    this.selectedCardIndices.forEach(index => {
+      const cardElement = document.querySelector(`.draggable-container:nth-child(${index + 1}) .card`);
+      if (cardElement) {
+        this.renderer.addClass(cardElement, 'selected-card-dragging');
+      }
+    });
+  }
+
+  onDragEnded() {
+    // Remove the opacity style when drag ends
+    const selectedCardElements = document.querySelectorAll('.selected-card-dragging');
+    selectedCardElements.forEach(element => {
+      this.renderer.removeClass(element, 'selected-card-dragging');
+    });
+  }
+
+/////////////////////////////////////////////////////////////////////////////////////////// 
 
   drop(event: CdkDragDrop<string[]>) {
     // Log the order of the array before moving the cards

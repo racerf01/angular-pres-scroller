@@ -1,52 +1,56 @@
 <div class="outer-container" cdkScrollable>
   <dts-select-container 
-  (select)="onSelectionChange($event)"
-  [selectOnDrag]="true"
-  [selectOnClick]="true" 
-  [dragOverItems]="false"
-  [selectMode]="false"
-  [custom]="true"
-  [selectWithShortcut]="true"
-  style="position: absolute;">
+    (select)="onSelectionChange($event)"
+    [selectOnDrag]="true"
+    [selectOnClick]="true" 
+    [dragOverItems]="false"
+    [selectMode]="false"
+    [custom]="true"
+    [selectWithShortcut]="true"
+    style="position: absolute;">
     <div class="cards-container" cdkDropList cdkDropListOrientation="horizontal" (cdkDropListDropped)="drop($event)">
       <ng-container *ngFor="let card of cards; let i = index">
-          <div class="draggable-container"
-              cdkDrag
-              cdkDragBoundary=".cards-container"
-              [cdkDragDisabled]="!card.selected"
-              [dtsSelectItem]="card"
-              [class.selected]="card.selected"
-              >
-            <div class="card">
-              <div class="card-content-container" style="position: relative;">
-                <!-- Your card content here -->
-              </div>
-              <div class="drag-delete-buttons" *ngIf="areAnyCardsSelected()">
-                <button class="dragButton" cdkDragHandle *ngIf="isFirstSelected(i)">
-                  <img class="dragButton-icon" src="assets/drag-button-icon.svg" style="width: 75%; height: 75%;">
-                </button>
-                <button class="deleteButton" *ngIf="isLastSelected(i)" (click)="deleteSelectedCards()">
-                  <img class="deleteButton-icon" src="assets/delete-button-icon.svg">
-                </button>
-              </div>
+        <div class="draggable-container"
+          cdkDrag
+          cdkDragBoundary=".cards-container"
+          [cdkDragDisabled]="!card.selected"
+          [dtsSelectItem]="card"
+          [class.selected]="card.selected"
+          (cdkDragStarted)="onDragStarted($event)"
+          (cdkDragEnded)="onDragEnded()">
+
+          <div class="card">
+            <div class="card-content-container" style="position: relative;">
+              <!-- Your card content here -->
             </div>
-            <div *cdkDragPreview>
-              <div class="preview">
-                <ng-container *ngFor="let index of selectedCardIndices">
-                  <div class="card-preview" *ngIf="cards[index].selected">
-                    <div class="card-content-container" style="position: relative;">
-                    </div>
-                  </div>
-                </ng-container>
-              </div>
+            <div class="drag-delete-buttons" *ngIf="areAnyCardsSelected()">
+              <button class="dragButton" cdkDragHandle *ngIf="isFirstSelected(i)">
+                <img class="dragButton-icon" src="assets/drag-button-icon.svg" style="width: 75%; height: 75%;">
+              </button>
+              <button class="deleteButton" *ngIf="isLastSelected(i)" (click)="deleteSelectedCards()">
+                <img class="deleteButton-icon" src="assets/delete-button-icon.svg">
+              </button>
             </div>
           </div>
+          <div *cdkDragPreview>
+            <div class="preview">
+              <ng-container *ngFor="let index of selectedCardIndices">
+                <div class="card" *ngIf="cards[index].selected">
+                  <div class="card-content-container-preview" style="position: relative;">
+                    <!-- Your card content here -->
+                  </div>
+                </div>
+              </ng-container>
+            </div>
+            <div class="drag-delete-buttons-preview">
+              <button class="dragButton" cdkDragHandle>
+                <img class="dragButton-icon" src="assets/drag-button-icon.svg" style="width: 75%; height: 75%;">
+              </button>
+            </div>
+          </div>
+        </div>
       </ng-container>
     </div>
   </dts-select-container>
   <button mat-button (click)="addMoreCards()">Add Card</button>
 </div>
-
-
-
-

@@ -15,12 +15,15 @@
   margin-bottom: 16em; 
 }
 
+.draggable-container {
+  margin-bottom: -10em;
+}
+
 /* card styling */
 .card {
   margin: 1em; 
   display: inline-block; 
   text-align: center;
-  padding-bottom: 2em;
 }
 
 .card-content-container {
@@ -81,8 +84,28 @@
   flex-wrap: nowrap; /* Prevent wrapping to the next line */
 }
 
-.card-preview {
-  margin: 1em;  /* Add some space between preview cards */
+.card-preview { 
+  display: inline-block; 
+  text-align: center;
+}
+
+.card-content-container-preview {
+  border-radius: 1em;
+  background-color: white;
+  box-shadow: none;
+  border: 0.2em solid #4E5871; /* Border applied to mat-card when parent is selected */
+  box-shadow: 0px 2.706px 9.471px rgba(89, 15, 253, 0.20);
+  width: 15em;
+  height: 10em;
+}
+
+.drag-delete-buttons-preview {
+  margin-top: -1em;
+  margin-left: 1em;
+}
+
+.selected-card-dragging {
+  opacity: 0;
 }
 
 .cdk-drag-animating {
