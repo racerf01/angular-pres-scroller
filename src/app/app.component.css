@@ -20,7 +20,7 @@
   margin: 1em; 
   display: inline-block; 
   text-align: center;
-  padding: 0;
+  padding-bottom: 2em;
 }
 
 .card-content-container {

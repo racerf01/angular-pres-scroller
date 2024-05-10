@@ -20,7 +20,7 @@ import { DragToSelectModule } from 'ngx-drag-to-select';
     DragDropModule,
     MatIconModule,
     MatCardModule,
-    [DragToSelectModule.forRoot()]
+    [DragToSelectModule.forRoot()], 
   ],
   providers: [
     provideAnimationsAsync()
