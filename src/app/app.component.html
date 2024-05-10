@@ -23,10 +23,10 @@
               </div>
               <div class="drag-delete-buttons" *ngIf="areAnyCardsSelected()">
                 <button class="dragButton" cdkDragHandle *ngIf="isFirstSelected(i)">
-                  <img class="dragButton-icon" src="../assets/drag-button-icon.svg" style="width: 75%; height: 75%;">
+                  <img class="dragButton-icon" src="/src/assets/drag-button-icon.svg" style="width: 75%; height: 75%;">
                 </button>
                 <button class="deleteButton" *ngIf="isLastSelected(i)" (click)="deleteSelectedCards()">
-                  <img class="deleteButton-icon" src="../assets/delete-button-icon.svg">
+                  <img class="deleteButton-icon" src="/src/assets/delete-button-icon.svg">
                 </button>
               </div>
             </div>
