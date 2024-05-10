@@ -6,6 +6,7 @@
   [dragOverItems]="false"
   [selectMode]="false"
   [custom]="true"
+  [selectWithShortcut]="false"
   style="position: absolute;">
     <div class="cards-container" cdkDropList cdkDropListOrientation="horizontal" (cdkDropListDropped)="drop($event)">
       <ng-container *ngFor="let card of cards; let i = index">
@@ -29,10 +30,26 @@
                 </button>
               </div>
             </div>
+            <div *cdkDragPreview>
+              <div class="preview">
+                <ng-container *ngFor="let index of selectedCardIndices">
+                  <div class="card-preview" *ngIf="cards[index].selected">
+                    <!-- Clone card content here -->
+                    <div class="card-content-container" style="position: relative;">
+                      <!-- Your card content here -->
+                    </div>
+                    
+                  </div>
+                </ng-container>
+              </div>
+            </div>
           </div>
       </ng-container>
     </div>
   </dts-select-container>
+  <button mat-button (click)="addMoreCards()">Add Card</button>
 </div>
+
+
 
 

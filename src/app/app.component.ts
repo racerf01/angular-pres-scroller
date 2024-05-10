@@ -193,4 +193,15 @@ export class AppComponent {
       this.cards[index].selected = true;
     });
   }
+
+  ///////////////////////////////////////////////
+
+  addMoreCards() {
+    // Add logic to add more cards here
+    // For example, you can push new card objects into the cards array
+    this.cards.push(
+      { id: this.cards.length + 1, title: "New Slide", selected: false },
+      // Add more cards as needed
+    );
+  }
 }
