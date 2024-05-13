@@ -104,8 +104,12 @@
   margin-left: 1em;
 }
 
+.cdk-drag-placeholder {
+  opacity: 1;
+}
+
 .selected-card-dragging  {
-  opacity: 0;
+  opacity: 0.2;
 }
 
 .hide-delete-button {
@@ -120,7 +124,3 @@
 }
 
 /* ------------------- */
-
-.cdk-drag-placeholder {
-  opacity: 0;
-}

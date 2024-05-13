@@ -4,9 +4,9 @@
     [selectOnDrag]="true"
     [selectOnClick]="true" 
     [dragOverItems]="false"
-    [selectMode]="false"
+    [selectMode]="true"
     [custom]="true"
-    [selectWithShortcut]="true"
+    [selectWithShortcut]="false"
     style="position: absolute;">
     <div class="cards-container" cdkDropList cdkDropListOrientation="horizontal" (cdkDropListDropped)="drop($event)">
       <ng-container *ngFor="let card of cards; let i = index">
