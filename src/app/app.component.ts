@@ -209,35 +209,39 @@ export class AppComponent {
 /////////////////////////////////////////////////////////////////////////////////////////// 
 
 drop(event: CdkDragDrop<string[]>) {
-  // Log the order of the array before moving the cards
-  console.log('Array order before moving:', this.cards.map(card => card.id));
+  if (event.previousIndex !== event.currentIndex) {
+    // Log the order of the array before moving the cards
+    console.log('Array order before moving:', this.cards.map(card => card.id));
 
-  // Calculate the delta between the previous and current index to determine the movement distance
-  const delta = event.currentIndex - event.previousIndex;
+    // Create a copy of the selected cards
+    const selectedCards = this.selectedCardIndices.map(index => this.cards[index]);
 
-  // Move each selected card in the array by the same delta
-  this.selectedCardIndices.forEach((index, i) => {
-    const newIndex = index + delta;
-    // Ensure the new index is within the bounds of the array
-    if (newIndex >= 0 && newIndex < this.cards.length) {
-      // Update the position of the card in the array
-      moveItemInArray(this.cards, index, newIndex);
-      // Update the selected card index to reflect the new position
-      this.selectedCardIndices[i] = newIndex;
-    }
-  });
+    // Remove the selected cards from the original array
+    this.selectedCardIndices.sort((a, b) => b - a); // Sort in descending order to prevent index shifting
+    this.selectedCardIndices.forEach(index => this.cards.splice(index, 1));
 
-  // Log the order of the array after moving the cards
-  console.log('Array order after moving:', this.cards.map(card => card.id));
+    // Calculate the adjusted drop position
+    const dropPosition = event.currentIndex < event.previousIndex ? event.currentIndex : event.currentIndex + 1 - selectedCards.length;
 
-  // Clear selected state for all cards
-  this.cards.forEach(card => card.selected = false);
-  
-  // Set selected state only for the dragged cards
-  this.selectedCardIndices.forEach(index => {
-    this.cards[index].selected = true;
-  });
+    // Insert the selected cards at the new location
+    this.cards.splice(dropPosition, 0, ...selectedCards);
+
+    // Update the selectedCardIndices array to reflect the new positions of the selected cards
+    this.selectedCardIndices = Array.from({length: selectedCards.length}, (_, i) => dropPosition + i);
+
+    // Log the order of the array after moving the cards
+    console.log('Array order after moving:', this.cards.map(card => card.id));
+
+    // Clear selected state for all cards
+    this.cards.forEach(card => card.selected = false);
+    
+    // Set selected state only for the dragged cards
+    this.selectedCardIndices.forEach(index => {
+      this.cards[index].selected = true;
+    });
+  }
 }
+
 
 
 
