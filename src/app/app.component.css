@@ -4,6 +4,7 @@
   margin-left: 0; /* Remove the left margin */
   height: 100%;
   width: 100%;
+  z-index: 0;
 }
 
 
@@ -12,11 +13,13 @@
   flex-direction: row;
   max-width: 100%; /* Adjust maximum width as needed */
   margin-top: 18em; /* Add padding to keep cards away from edges */
-  margin-bottom: 16em; 
+  height: 1em;
+  z-index: 0;
 }
 
 .draggable-container {
-  margin-bottom: -10em;
+  z-index: 0;
+  
 }
 
 /* card styling */
@@ -24,6 +27,7 @@
   margin: 1em; 
   display: inline-block; 
   text-align: center;
+  z-index: 0;
 }
 
 .card-content-container {
@@ -33,6 +37,7 @@
   border: 0.2em solid #B6BED2;
   width: 15em;
   height: 10em;
+  z-index: 0;
 }
 
 .selected .card-content-container {
@@ -44,6 +49,7 @@
   display: flex; 
   justify-content: flex-start; 
   width: 100%;
+  z-index: 199999;
 }
 
 .dragButton, .deleteButton {
@@ -102,6 +108,7 @@
 .drag-delete-buttons-preview {
   margin-top: -1em;
   margin-left: 1em;
+  z-index: 9999999;
 }
 
 .cdk-drag-placeholder {
