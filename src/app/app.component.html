@@ -24,8 +24,8 @@
             <div class="card-content-container" style="position: relative;">
               <!-- Your card content here -->
             </div>
-            <div class="drag-delete-buttons" *ngIf="areAnyCardsSelected()">
-              <button class="dragButton" cdkDragHandle *ngIf="isFirstSelected(i)">
+            <div class="drag-delete-buttons" cdkDragHandle *ngIf="areAnyCardsSelected()">
+              <button class="dragButton"  *ngIf="isFirstSelected(i)">
                 <img class="dragButton-icon" src="assets/drag-button-icon.svg" style="width: 75%; height: 75%;">
               </button>
               <button class="deleteButton" *ngIf="isLastSelected(i)" (click)="deleteSelectedCards()">
@@ -53,5 +53,5 @@
       </ng-container>
     </div>
   </dts-select-container>
-  <button mat-button (click)="addMoreCards()">Add Card</button>
+  <button mat-button (click)="addMoreCards()" style="position: fixed;">Add Card</button>
 </div>

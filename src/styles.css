@@ -18,3 +18,19 @@ body {
     overflow-x: scroll;
     overflow-y: hidden;
   }
+
+  ::-webkit-scrollbar {
+    border-radius: 30px; /* Border radius */
+    height: 0.8em;
+  }
+  
+  /* Track */
+  ::-webkit-scrollbar-track {
+    background: #FEFEFE;
+  }
+  
+  /* Handle */
+  ::-webkit-scrollbar-thumb {
+    background: #4E5871; /* Color of the scrollbar handle */
+    border-radius: 10em; /* Border radius of the scrollbar handle */
+  }

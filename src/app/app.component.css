@@ -38,6 +38,7 @@
   width: 15em;
   height: 10em;
   z-index: 0;
+  transition: border-color 0.3s, box-shadow 0.3s; /* Adding transition for border-color and box-shadow */
 }
 
 .selected .card-content-container {
@@ -50,6 +51,7 @@
   justify-content: flex-start; 
   width: 100%;
   z-index: 199999;
+  transition: all 0.3s; /* Adding transition for all properties */
 }
 
 .dragButton, .deleteButton {
@@ -63,6 +65,7 @@
   flex-shrink: 0; 
   margin: 0.5em;
   height: 2.5em;
+  transition: all 0.3s; /* Adding transition for all properties */
 }
 
 .dragButton {
@@ -131,3 +134,5 @@
 }
 
 /* ------------------- */
+
+
