@@ -30,6 +30,7 @@ export class AppComponent {
     // Add more cards as needed
   ];
 
+  selectMode = false; 
   //////////////////////////////////////////////////////////////////////////////////////////////
 
   @HostListener('wheel', ['$event']) onMouseWheel(event: WheelEvent) {
@@ -55,6 +56,9 @@ export class AppComponent {
 ///////////////////////////////////////////////////////////////////
   selectedCardIndices: number[] = [];
 
+  firstSelectedIndex: number = -1;
+  lastSelectedIndex: number = -1;
+
   onSelectionChange(selectedItems: Card[]) {
     // Preserve the selection state of previously selected cards
     const previouslySelectedIndices = this.selectedCardIndices.slice();
@@ -62,16 +66,19 @@ export class AppComponent {
     // Clear the selectedCardIndices array
     this.selectedCardIndices = [];
 
+    this.updateSelectedCardIndices(selectedItems);
+
     // Set selected state to true for items that are selected
-    selectedItems.forEach((item: Card) => {
-        const index = this.cards.findIndex(card => card === item);
-        if (index !== -1) {
-            const card = this.cards[index];
-            card.selected = true;
-            if (!this.selectedCardIndices.includes(index)) {
-                this.selectedCardIndices.push(index); // Add index to selectedCardIndices if not already present
-            }
-        }
+    selectedItems.forEach((item: Card, index: number) => {
+      const cardIndex = this.cards.findIndex(card => card === item);
+      if (cardIndex !== -1) {
+          const card = this.cards[cardIndex];
+          card.selected = true;
+          if (this.firstSelectedIndex === -1) {
+              this.firstSelectedIndex = cardIndex;
+          }
+          this.lastSelectedIndex = cardIndex;
+      }
     });
 
     // Remove deselected cards from the preview
@@ -79,6 +86,11 @@ export class AppComponent {
 
     // Clone selected cards to the preview
     this.cloneSelectedCardsToPreview();
+
+    // Update selectMode based on the number of selected items
+    this.selectMode = selectedItems.length > 1;
+
+    this.updateButtonPositions();
 
     // Preserve the selection state of previously selected cards only if more than one card is selected
     if (selectedItems.length > 1) {
@@ -93,20 +105,73 @@ export class AppComponent {
 
     // Sort selectedCardIndices to ensure they are in ascending order based on their position in the cards array
     this.selectedCardIndices.sort((a, b) => a - b);
+
+    // Update the height of the .cards-container class if more than one card is selected
+    const classesToUpdate = ['.cards-container', '.cdk-drag', '.draggable-container', '.dts-select-item', '.selected'];
+
+    // Update the height of the classes if more than one card is selected
+    classesToUpdate.forEach((className) => {
+        const elements = document.querySelectorAll(className) as NodeListOf<HTMLElement>;
+        elements.forEach((element) => {
+            if (this.selectMode) {
+                element.style.height = '10em';
+            } else {
+                element.style.height = '14em'; // Reset to default height when less than two cards are selected
+            }
+        });
+    });
+}
+
+
+
+
+updateSelectedCardIndices(selectedItems: Card[]) {
+  this.selectedCardIndices = [];
+  selectedItems.forEach((item: Card) => {
+      const index = this.cards.findIndex(card => card === item);
+      if (index !== -1) {
+          this.selectedCardIndices.push(index);
+      }
+  });
+}
+
+updateButtonPositions() {
+  // Update position of drag and delete buttons
+  this.cards.forEach((card, index) => {
+      const buttonContainer = document.querySelector(`.draggable-container:nth-child(${index + 1}) .drag-delete-buttons`) as HTMLElement;
+      if (buttonContainer) {
+          const dragButton = buttonContainer.querySelector('.dragButton') as HTMLElement;
+          const deleteButton = buttonContainer.querySelector('.deleteButton') as HTMLElement;
+          if (dragButton && deleteButton) {
+              dragButton.style.display = this.isFirstSelected(index) ? 'block' : 'none';
+              deleteButton.style.display = this.isLastSelected(index) ? 'block' : 'none';
+          }
+      }
+  });
 }
 
 
 
 
 
-
   isFirstSelected(index: number): boolean {
-    return this.selectedCardIndices[0] === index;
-  }
+    // Check if any cards are selected
+    if (this.areAnyCardsSelected()) {
+        // Check if the current index is the index of the first selected card
+        return this.selectedCardIndices[0] === index;
+    }
+    return false;
+}
 
-  isLastSelected(index: number): boolean {
-    return this.selectedCardIndices[this.selectedCardIndices.length - 1] === index;
-  }
+isLastSelected(index: number): boolean {
+    // Check if any cards are selected
+    if (this.areAnyCardsSelected()) {
+        // Check if the current index is the index of the last selected card
+        return this.selectedCardIndices[this.selectedCardIndices.length - 1] === index;
+    }
+    return false;
+}
+
 
   deleteSelectedCards() {
     console.log('Deleting selected cards'); // Log deletion action
