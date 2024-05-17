@@ -60,6 +60,10 @@ export class AppComponent {
   lastSelectedIndex: number = -1;
 
   onSelectionChange(selectedItems: Card[]) {
+
+    this.selectedCardIndices = [];
+    this.firstSelectedIndex = -1;
+    this.lastSelectedIndex = -1;
     // Preserve the selection state of previously selected cards
     const previouslySelectedIndices = this.selectedCardIndices.slice();
 
@@ -72,12 +76,12 @@ export class AppComponent {
     selectedItems.forEach((item: Card, index: number) => {
       const cardIndex = this.cards.findIndex(card => card === item);
       if (cardIndex !== -1) {
-          const card = this.cards[cardIndex];
-          card.selected = true;
-          if (this.firstSelectedIndex === -1) {
-              this.firstSelectedIndex = cardIndex;
-          }
-          this.lastSelectedIndex = cardIndex;
+        this.selectedCardIndices.push(cardIndex);
+        this.cards[cardIndex].selected = true;
+        if (this.firstSelectedIndex === -1) {
+          this.firstSelectedIndex = cardIndex;
+        }
+        this.lastSelectedIndex = cardIndex;
       }
     });
 
@@ -88,8 +92,8 @@ export class AppComponent {
     this.cloneSelectedCardsToPreview();
 
     // Update selectMode based on the number of selected items
+    this.selectedCardIndices.sort((a, b) => a - b);
     this.selectMode = selectedItems.length > 1;
-
     this.updateButtonPositions();
 
     // Preserve the selection state of previously selected cards only if more than one card is selected
@@ -104,7 +108,7 @@ export class AppComponent {
     }
 
     // Sort selectedCardIndices to ensure they are in ascending order based on their position in the cards array
-    this.selectedCardIndices.sort((a, b) => a - b);
+    this.selectedCardIndices.sort((a, b) => a - b); 
 
     // Update the height of the .cards-container class if more than one card is selected
     const classesToUpdate = ['.cards-container', '.cdk-drag', '.draggable-container', '.dts-select-item', '.selected'];
@@ -136,17 +140,20 @@ updateSelectedCardIndices(selectedItems: Card[]) {
 }
 
 updateButtonPositions() {
-  // Update position of drag and delete buttons
   this.cards.forEach((card, index) => {
-      const buttonContainer = document.querySelector(`.draggable-container:nth-child(${index + 1}) .drag-delete-buttons`) as HTMLElement;
-      if (buttonContainer) {
-          const dragButton = buttonContainer.querySelector('.dragButton') as HTMLElement;
-          const deleteButton = buttonContainer.querySelector('.deleteButton') as HTMLElement;
-          if (dragButton && deleteButton) {
-              dragButton.style.display = this.isFirstSelected(index) ? 'block' : 'none';
-              deleteButton.style.display = this.isLastSelected(index) ? 'block' : 'none';
-          }
+    const cardElement = document.querySelector(`.draggable-container:nth-child(${index + 1})`) as HTMLElement;
+    if (cardElement) {
+      const dragButton = cardElement.querySelector('.dragButton') as HTMLElement;
+      const deleteButton = cardElement.querySelector('.deleteButton') as HTMLElement;
+
+      if (dragButton) {
+        dragButton.style.display = this.isFirstSelected(index) ? 'block' : 'none';
       }
+
+      if (deleteButton) {
+        deleteButton.style.display = this.isLastSelected(index) ? 'block' : 'none';
+      }
+    }
   });
 }
 
@@ -154,23 +161,14 @@ updateButtonPositions() {
 
 
 
-  isFirstSelected(index: number): boolean {
-    // Check if any cards are selected
-    if (this.areAnyCardsSelected()) {
-        // Check if the current index is the index of the first selected card
-        return this.selectedCardIndices[0] === index;
-    }
-    return false;
+isFirstSelected(index: number): boolean {
+  return this.selectedCardIndices.length > 0 && this.selectedCardIndices[0] === index;
 }
 
 isLastSelected(index: number): boolean {
-    // Check if any cards are selected
-    if (this.areAnyCardsSelected()) {
-        // Check if the current index is the index of the last selected card
-        return this.selectedCardIndices[this.selectedCardIndices.length - 1] === index;
-    }
-    return false;
+  return this.selectedCardIndices.length > 0 && this.selectedCardIndices[this.selectedCardIndices.length - 1] === index;
 }
+
 
 
   deleteSelectedCards() {
@@ -241,14 +239,11 @@ isLastSelected(index: number): boolean {
   constructor(private renderer: Renderer2) {}
 
   onDragStarted(event: CdkDragStart) {
-    // Set the opacity of selected cards to 0 during drag
     this.selectedCardIndices.forEach(index => {
-      const cardElement = document.querySelector(`.draggable-container:nth-child(${index + 1}) .card`);
+      const cardElement = document.querySelector(`.draggable-container:nth-child(${index + 1}) .card`) as HTMLElement;
       if (cardElement) {
         this.renderer.addClass(cardElement, 'selected-card-dragging');
-        
-        // Hide the delete button when dragging starts
-        const deleteButton = cardElement.querySelector('.deleteButton');
+        const deleteButton = cardElement.querySelector('.deleteButton') as HTMLElement;
         if (deleteButton) {
           this.renderer.addClass(deleteButton, 'hide-delete-button');
         }
@@ -257,18 +252,17 @@ isLastSelected(index: number): boolean {
   }
   
   onDragEnded() {
-    // Remove the opacity style and show the delete button when drag ends
     const selectedCardElements = document.querySelectorAll('.selected-card-dragging');
     selectedCardElements.forEach(element => {
-      this.renderer.removeClass(element, 'selected-card-dragging');
-      
-      // Show the delete button
-      const deleteButton = element.querySelector('.deleteButton');
+      const cardElement = element as HTMLElement;
+      this.renderer.removeClass(cardElement, 'selected-card-dragging');
+      const deleteButton = cardElement.querySelector('.deleteButton') as HTMLElement;
       if (deleteButton) {
         this.renderer.removeClass(deleteButton, 'hide-delete-button');
       }
     });
   }
+  
   
 
 /////////////////////////////////////////////////////////////////////////////////////////// 
