@@ -51,53 +51,53 @@ export class AppComponent {
   lastSelectedIndex: number = -1;
 
   onSelectionChange(selectedItems: Card[]) {
-      // Preserve the selection state of previously selected cards
-      const previouslySelectedIndices = this.selectedCardIndices.slice();
+    // Preserve the selection state of previously selected cards
+    const previouslySelectedIndices = this.selectedCardIndices.slice();
 
-      // Clear the selectedCardIndices array
-      this.selectedCardIndices = [];
+    // Clear the selectedCardIndices array
+    this.selectedCardIndices = [];
 
-      // Set selected state to true for items that are selected
-      selectedItems.forEach((item: Card) => {
-          const index = this.cards.findIndex(card => card === item);
-          if (index !== -1) {
-              this.cards[index].selected = true;
-              if (!this.selectedCardIndices.includes(index)) {
-                  this.selectedCardIndices.push(index); // Add index to selectedCardIndices if not already present
-              }
-          }
-      });
+    // Set selected state to true for items that are selected
+    selectedItems.forEach((item: Card) => {
+        const index = this.cards.findIndex(card => card === item);
+        if (index !== -1) {
+            this.cards[index].selected = true;
+            if (!this.selectedCardIndices.includes(index)) {
+                this.selectedCardIndices.push(index); // Add index to selectedCardIndices if not already present
+            }
+        }
+    });
 
-      // Update first and last selected indices
-      if (this.selectedCardIndices.length > 0) {
-          this.firstSelectedIndex = Math.min(...this.selectedCardIndices);
-          this.lastSelectedIndex = Math.max(...this.selectedCardIndices);
-      } else {
-          this.firstSelectedIndex = -1;
-          this.lastSelectedIndex = -1;
-      }
+    // Update first and last selected indices
+    if (this.selectedCardIndices.length > 0) {
+        this.firstSelectedIndex = Math.min(...this.selectedCardIndices);
+        this.lastSelectedIndex = Math.max(...this.selectedCardIndices);
+    } else {
+        this.firstSelectedIndex = -1;
+        this.lastSelectedIndex = -1;
+    }
 
-      // Remove deselected cards from the preview
-      this.removeSelectedCardsFromPreview();
+    // Remove deselected cards from the preview
+    this.removeSelectedCardsFromPreview();
 
-      // Clone selected cards to the preview
-      this.cloneSelectedCardsToPreview();
+    // Clone selected cards to the preview
+    this.cloneSelectedCardsToPreview();
 
-      // Preserve the selection state of previously selected cards only if more than one card is selected
-      if (selectedItems.length > 1) {
-          previouslySelectedIndices.forEach(index => {
-              if (!this.selectedCardIndices.includes(index)) {
-                  this.cards[index].selected = true;
-                  this.selectedCardIndices.push(index);
-              }
-          });
-      }
+    // Preserve the selection state of previously selected cards only if more than one card is selected
+    if (selectedItems.length > 1) {
+        previouslySelectedIndices.forEach(index => {
+            if (!this.selectedCardIndices.includes(index)) {
+                this.cards[index].selected = true;
+                this.selectedCardIndices.push(index);
+            }
+        });
+    }
 
-      // Sort selectedCardIndices to ensure they are in ascending order based on their position in the cards array
-      this.selectedCardIndices.sort((a, b) => a - b);
+    // Sort selectedCardIndices to ensure they are in ascending order based on their position in the cards array
+    this.selectedCardIndices.sort((a, b) => a - b);
 
-      // Update selectMode based on the number of selected items
-      this.selectMode = selectedItems.length > 1;
+    // Update selectMode based on the number of selected items
+    this.selectMode = selectedItems.length > 1;
   }
 
   isFirstSelected(index: number): boolean {
@@ -122,19 +122,6 @@ export class AppComponent {
     // this.removeSelectedCardsFromPreview();
   }
 
-  areAnyCardsSelected(): boolean {
-    return this.cards.some(card => card.selected);
-  }
-
-  shouldDisplayButtonUnderFirstCard(): boolean {
-    // Check if any cards are selected
-    if (this.areAnyCardsSelected()) {
-      // Check if the first selected card index is equal to the current index
-      return this.selectedCardIndices[0] === 0;
-    }
-    return false;
-  }
-
   cloneSelectedCardsToPreview() {
     try {
       const previewContainer = document.querySelector('.preview');
@@ -146,8 +133,7 @@ export class AppComponent {
           const cardContainer = document.querySelector(`.draggable-container:nth-child(${index + 1})`);
           if (cardContainer) {
             const clonedCardContainer = cardContainer.cloneNode(true) as Element;
-            clonedCardContainer.querySelectorAll('.drag-delete-buttons').forEach((el: Element) => el.remove()); // Remove drag-delete buttons
-            previewContainer.appendChild(clonedCardContainer);
+            previewContainer.appendChild(clonedCardContainer);  
           }
         });
       }
@@ -171,59 +157,54 @@ export class AppComponent {
   constructor(private renderer: Renderer2) {}
 
   onDragStarted(event: CdkDragStart) {
+    // Set the opacity of selected cards to 0 during drag
     this.selectedCardIndices.forEach(index => {
-      const cardElement = document.querySelector(`.draggable-container:nth-child(${index + 1}) .card`) as HTMLElement;
+      const cardElement = document.querySelector(`.draggable-container:nth-child(${index + 1}) .card`);
       if (cardElement) {
         this.renderer.addClass(cardElement, 'selected-card-dragging');
-        const deleteButton = cardElement.querySelector('.deleteButton') as HTMLElement;
-        if (deleteButton) {
-          this.renderer.addClass(deleteButton, 'hide-delete-button');
-        }
       }
     });
   }
 
   onDragEnded() {
+    // Remove the opacity style and show the delete button when drag ends
     const selectedCardElements = document.querySelectorAll('.selected-card-dragging');
     selectedCardElements.forEach(element => {
-      const cardElement = element as HTMLElement;
-      this.renderer.removeClass(cardElement, 'selected-card-dragging');
-      const deleteButton = cardElement.querySelector('.deleteButton') as HTMLElement;
-      if (deleteButton) {
-        this.renderer.removeClass(deleteButton, 'hide-delete-button');
-      }
+      this.renderer.removeClass(element, 'selected-card-dragging');
     });
   }
 
   drop(event: CdkDragDrop<string[]>) {
     if (event.previousIndex !== event.currentIndex) {
+      // Log the order of the array before moving the cards
       console.log('Array order before moving:', this.cards.map(card => card.id));
-
+  
       // Create a copy of the selected cards
       const selectedCards = this.selectedCardIndices.map(index => this.cards[index]);
-
+  
       // Remove the selected cards from the original array
       this.selectedCardIndices.sort((a, b) => b - a); // Sort in descending order to prevent index shifting
       this.selectedCardIndices.forEach(index => this.cards.splice(index, 1));
-
+  
       // Calculate the adjusted drop position
       const dropPosition = event.currentIndex < event.previousIndex ? event.currentIndex : event.currentIndex + 1 - selectedCards.length;
-
+  
       // Insert the selected cards at the new location
       this.cards.splice(dropPosition, 0, ...selectedCards);
-
+  
       // Update the selectedCardIndices array to reflect the new positions of the selected cards
-      this.selectedCardIndices = Array.from({ length: selectedCards.length }, (_, i) => dropPosition + i);
-
+      this.selectedCardIndices = Array.from({length: selectedCards.length}, (_, i) => dropPosition + i);
+  
+      // Log the order of the array after moving the cards
       console.log('Array order after moving:', this.cards.map(card => card.id));
-
+  
       // Clear selected state for all cards
       this.cards.forEach(card => card.selected = false);
-
+      
       // Set selected state only for the dragged cards
       this.selectedCardIndices.forEach(index => {
         this.cards[index].selected = true;
-      }); 
+      });
     }
   }
 
