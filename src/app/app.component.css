@@ -13,7 +13,7 @@
   flex-direction: row;
   max-width: 100%; /* Adjust maximum width as needed */
   margin-top: 18em; /* Add padding to keep cards away from edges */
-  height: 1em;
+  height: 4.2em;
   z-index: 0;
 }
 

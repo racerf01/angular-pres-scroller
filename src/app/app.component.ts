@@ -28,6 +28,7 @@ export class AppComponent {
   ];
 
   selectMode = false;
+  selectOnClick = true; 
 
   @HostListener('wheel', ['$event']) onMouseWheel(event: WheelEvent) {
     if (event.deltaY !== 0) {
@@ -51,6 +52,7 @@ export class AppComponent {
   lastSelectedIndex: number = -1;
 
   onSelectionChange(selectedItems: Card[]) {
+    
     // Preserve the selection state of previously selected cards
     const previouslySelectedIndices = this.selectedCardIndices.slice();
 
