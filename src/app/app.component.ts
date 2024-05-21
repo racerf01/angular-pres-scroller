@@ -30,6 +30,7 @@ export class AppComponent {
     // Add more cards as needed
   ];
 
+  selectMode = false; 
   //////////////////////////////////////////////////////////////////////////////////////////////
 
   @HostListener('wheel', ['$event']) onMouseWheel(event: WheelEvent) {
@@ -55,23 +56,33 @@ export class AppComponent {
 ///////////////////////////////////////////////////////////////////
   selectedCardIndices: number[] = [];
 
+  firstSelectedIndex: number = -1;
+  lastSelectedIndex: number = -1;
+
   onSelectionChange(selectedItems: Card[]) {
+
+    this.selectedCardIndices = [];
+    this.firstSelectedIndex = -1;
+    this.lastSelectedIndex = -1;
     // Preserve the selection state of previously selected cards
     const previouslySelectedIndices = this.selectedCardIndices.slice();
 
     // Clear the selectedCardIndices array
     this.selectedCardIndices = [];
 
+    this.updateSelectedCardIndices(selectedItems);
+
     // Set selected state to true for items that are selected
-    selectedItems.forEach((item: Card) => {
-        const index = this.cards.findIndex(card => card === item);
-        if (index !== -1) {
-            const card = this.cards[index];
-            card.selected = true;
-            if (!this.selectedCardIndices.includes(index)) {
-                this.selectedCardIndices.push(index); // Add index to selectedCardIndices if not already present
-            }
+    selectedItems.forEach((item: Card, index: number) => {
+      const cardIndex = this.cards.findIndex(card => card === item);
+      if (cardIndex !== -1) {
+        this.selectedCardIndices.push(cardIndex);
+        this.cards[cardIndex].selected = true;
+        if (this.firstSelectedIndex === -1) {
+          this.firstSelectedIndex = cardIndex;
         }
+        this.lastSelectedIndex = cardIndex;
+      }
     });
 
     // Remove deselected cards from the preview
@@ -79,6 +90,11 @@ export class AppComponent {
 
     // Clone selected cards to the preview
     this.cloneSelectedCardsToPreview();
+
+    // Update selectMode based on the number of selected items
+    this.selectedCardIndices.sort((a, b) => a - b);
+    this.selectMode = selectedItems.length > 1;
+    this.updateButtonPositions();
 
     // Preserve the selection state of previously selected cards only if more than one card is selected
     if (selectedItems.length > 1) {
@@ -92,21 +108,68 @@ export class AppComponent {
     }
 
     // Sort selectedCardIndices to ensure they are in ascending order based on their position in the cards array
-    this.selectedCardIndices.sort((a, b) => a - b);
+    this.selectedCardIndices.sort((a, b) => a - b); 
+
+    // Update the height of the .cards-container class if more than one card is selected
+    const classesToUpdate = ['.cards-container', '.cdk-drag', '.draggable-container', '.dts-select-item', '.selected'];
+
+    // Update the height of the classes if more than one card is selected
+    classesToUpdate.forEach((className) => {
+        const elements = document.querySelectorAll(className) as NodeListOf<HTMLElement>;
+        elements.forEach((element) => {
+            if (this.selectMode) {
+                element.style.height = '10em';
+            } else {
+                element.style.height = '14em'; // Reset to default height when less than two cards are selected
+            }
+        });
+    });
+}
+
+
+
+
+updateSelectedCardIndices(selectedItems: Card[]) {
+  this.selectedCardIndices = [];
+  selectedItems.forEach((item: Card) => {
+      const index = this.cards.findIndex(card => card === item);
+      if (index !== -1) {
+          this.selectedCardIndices.push(index);
+      }
+  });
+}
+
+updateButtonPositions() {
+  this.cards.forEach((card, index) => {
+    const cardElement = document.querySelector(`.draggable-container:nth-child(${index + 1})`) as HTMLElement;
+    if (cardElement) {
+      const dragButton = cardElement.querySelector('.dragButton') as HTMLElement;
+      const deleteButton = cardElement.querySelector('.deleteButton') as HTMLElement;
+
+      if (dragButton) {
+        dragButton.style.display = this.isFirstSelected(index) ? 'block' : 'none';
+      }
+
+      if (deleteButton) {
+        deleteButton.style.display = this.isLastSelected(index) ? 'block' : 'none';
+      }
+    }
+  });
 }
 
 
 
 
 
+isFirstSelected(index: number): boolean {
+  return this.selectedCardIndices.length > 0 && this.selectedCardIndices[0] === index;
+}
 
-  isFirstSelected(index: number): boolean {
-    return this.selectedCardIndices[0] === index;
-  }
+isLastSelected(index: number): boolean {
+  return this.selectedCardIndices.length > 0 && this.selectedCardIndices[this.selectedCardIndices.length - 1] === index;
+}
 
-  isLastSelected(index: number): boolean {
-    return this.selectedCardIndices[this.selectedCardIndices.length - 1] === index;
-  }
+
 
   deleteSelectedCards() {
     console.log('Deleting selected cards'); // Log deletion action
@@ -176,14 +239,11 @@ export class AppComponent {
   constructor(private renderer: Renderer2) {}
 
   onDragStarted(event: CdkDragStart) {
-    // Set the opacity of selected cards to 0 during drag
     this.selectedCardIndices.forEach(index => {
-      const cardElement = document.querySelector(`.draggable-container:nth-child(${index + 1}) .card`);
+      const cardElement = document.querySelector(`.draggable-container:nth-child(${index + 1}) .card`) as HTMLElement;
       if (cardElement) {
         this.renderer.addClass(cardElement, 'selected-card-dragging');
-        
-        // Hide the delete button when dragging starts
-        const deleteButton = cardElement.querySelector('.deleteButton');
+        const deleteButton = cardElement.querySelector('.deleteButton') as HTMLElement;
         if (deleteButton) {
           this.renderer.addClass(deleteButton, 'hide-delete-button');
         }
@@ -192,18 +252,17 @@ export class AppComponent {
   }
   
   onDragEnded() {
-    // Remove the opacity style and show the delete button when drag ends
     const selectedCardElements = document.querySelectorAll('.selected-card-dragging');
     selectedCardElements.forEach(element => {
-      this.renderer.removeClass(element, 'selected-card-dragging');
-      
-      // Show the delete button
-      const deleteButton = element.querySelector('.deleteButton');
+      const cardElement = element as HTMLElement;
+      this.renderer.removeClass(cardElement, 'selected-card-dragging');
+      const deleteButton = cardElement.querySelector('.deleteButton') as HTMLElement;
       if (deleteButton) {
         this.renderer.removeClass(deleteButton, 'hide-delete-button');
       }
     });
   }
+  
   
 
 /////////////////////////////////////////////////////////////////////////////////////////// 
