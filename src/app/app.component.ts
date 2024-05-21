@@ -1,14 +1,11 @@
-import { Component, ViewChild, ElementRef, AfterViewInit, Renderer2, HostListener } from '@angular/core';
-import { CdkDragDrop, CdkDragStart, CdkDragEnd, moveItemInArray } from '@angular/cdk/drag-drop';
-import {MatCardModule} from '@angular/material/card';
-import { SelectContainerComponent } from 'ngx-drag-to-select';
+import { Component, Renderer2, HostListener } from '@angular/core';
+import { CdkDragDrop, CdkDragStart } from '@angular/cdk/drag-drop';
 import 'smoothscroll-polyfill';
 
 interface Card {
   id: number;
   title: string;
   selected: boolean;
-
 }
 
 @Component({
@@ -30,12 +27,9 @@ export class AppComponent {
     // Add more cards as needed
   ];
 
-  selectMode = false; 
-  //////////////////////////////////////////////////////////////////////////////////////////////
+  selectMode = false;
 
   @HostListener('wheel', ['$event']) onMouseWheel(event: WheelEvent) {
-    // console.log('Mouse wheel event:', event);
-
     if (event.deltaY !== 0) {
       event.preventDefault();
       this.scrollHorizontally(event.deltaY);
@@ -44,7 +38,6 @@ export class AppComponent {
 
   private scrollHorizontally(deltaY: number) {
     const element = document.querySelector('html'); // Select scrollable element by class or id
-    
     if (element) {
       element.scrollBy({
         left: deltaY,
@@ -53,17 +46,15 @@ export class AppComponent {
     }
   }
 
-///////////////////////////////////////////////////////////////////
   selectedCardIndices: number[] = [];
-
   firstSelectedIndex: number = -1;
   lastSelectedIndex: number = -1;
 
   onSelectionChange(selectedItems: Card[]) {
-
     this.selectedCardIndices = [];
     this.firstSelectedIndex = -1;
     this.lastSelectedIndex = -1;
+
     // Preserve the selection state of previously selected cards
     const previouslySelectedIndices = this.selectedCardIndices.slice();
 
@@ -78,12 +69,14 @@ export class AppComponent {
       if (cardIndex !== -1) {
         this.selectedCardIndices.push(cardIndex);
         this.cards[cardIndex].selected = true;
-        if (this.firstSelectedIndex === -1) {
-          this.firstSelectedIndex = cardIndex;
-        }
-        this.lastSelectedIndex = cardIndex;
       }
     });
+
+    // Update first and last selected indices
+    if (this.selectedCardIndices.length > 0) {
+      this.firstSelectedIndex = Math.min(...this.selectedCardIndices);
+      this.lastSelectedIndex = Math.max(...this.selectedCardIndices);
+    }
 
     // Remove deselected cards from the preview
     this.removeSelectedCardsFromPreview();
@@ -92,15 +85,12 @@ export class AppComponent {
     this.cloneSelectedCardsToPreview();
 
     // Update selectMode based on the number of selected items
-    this.selectedCardIndices.sort((a, b) => a - b);
     this.selectMode = selectedItems.length > 1;
-    this.updateButtonPositions();
 
     // Preserve the selection state of previously selected cards only if more than one card is selected
     if (selectedItems.length > 1) {
         previouslySelectedIndices.forEach(index => {
             if (!this.selectedCardIndices.includes(index)) {
-                // The card was previously selected but is not selected anymore
                 this.cards[index].selected = true;
                 this.selectedCardIndices.push(index);
             }
@@ -108,68 +98,27 @@ export class AppComponent {
     }
 
     // Sort selectedCardIndices to ensure they are in ascending order based on their position in the cards array
-    this.selectedCardIndices.sort((a, b) => a - b); 
+    this.selectedCardIndices.sort((a, b) => a - b);
 
-    // Update the height of the .cards-container class if more than one card is selected
-    const classesToUpdate = ['.cards-container', '.cdk-drag', '.draggable-container', '.dts-select-item', '.selected'];
+  }
 
-    // Update the height of the classes if more than one card is selected
-    classesToUpdate.forEach((className) => {
-        const elements = document.querySelectorAll(className) as NodeListOf<HTMLElement>;
-        elements.forEach((element) => {
-            if (this.selectMode) {
-                element.style.height = '10em';
-            } else {
-                element.style.height = '14em'; // Reset to default height when less than two cards are selected
-            }
-        });
-    });
-}
-
-
-
-
-updateSelectedCardIndices(selectedItems: Card[]) {
-  this.selectedCardIndices = [];
-  selectedItems.forEach((item: Card) => {
+  updateSelectedCardIndices(selectedItems: Card[]) {
+    this.selectedCardIndices = [];
+    selectedItems.forEach((item: Card) => {
       const index = this.cards.findIndex(card => card === item);
       if (index !== -1) {
-          this.selectedCardIndices.push(index);
+        this.selectedCardIndices.push(index);
       }
-  });
-}
+    });
+  }
 
-updateButtonPositions() {
-  this.cards.forEach((card, index) => {
-    const cardElement = document.querySelector(`.draggable-container:nth-child(${index + 1})`) as HTMLElement;
-    if (cardElement) {
-      const dragButton = cardElement.querySelector('.dragButton') as HTMLElement;
-      const deleteButton = cardElement.querySelector('.deleteButton') as HTMLElement;
+  isFirstSelected(index: number): boolean {
+    return index === this.firstSelectedIndex;
+  }
 
-      if (dragButton) {
-        dragButton.style.display = this.isFirstSelected(index) ? 'block' : 'none';
-      }
-
-      if (deleteButton) {
-        deleteButton.style.display = this.isLastSelected(index) ? 'block' : 'none';
-      }
-    }
-  });
-}
-
-
-
-
-
-isFirstSelected(index: number): boolean {
-  return this.selectedCardIndices.length > 0 && this.selectedCardIndices[0] === index;
-}
-
-isLastSelected(index: number): boolean {
-  return this.selectedCardIndices.length > 0 && this.selectedCardIndices[this.selectedCardIndices.length - 1] === index;
-}
-
-
+  isLastSelected(index: number): boolean {
+    return index === this.lastSelectedIndex;
+  }
 
   deleteSelectedCards() {
     console.log('Deleting selected cards'); // Log deletion action
@@ -179,13 +128,11 @@ isLastSelected(index: number): boolean {
     this.selectedCardIndices.forEach(index => {
       this.cards.splice(index, 1);
     });
-  
+
     // Clear selected indices array and update preview
     this.selectedCardIndices = [];
     // this.removeSelectedCardsFromPreview();
   }
-
-  /////////////////////////////////////////////////////////////////////////////////////////////
 
   areAnyCardsSelected(): boolean {
     return this.cards.some(card => card.selected);
@@ -199,28 +146,27 @@ isLastSelected(index: number): boolean {
     }
     return false;
   }
-  
 
   cloneSelectedCardsToPreview() {
     try {
-        const previewContainer = document.querySelector('.preview');
+      const previewContainer = document.querySelector('.preview');
 
-        if (previewContainer) {
-            previewContainer.innerHTML = ''; // Clear existing preview cards
+      if (previewContainer) {
+        previewContainer.innerHTML = ''; // Clear existing preview cards
 
-            this.selectedCardIndices.forEach(index => {
-                const cardContainer = document.querySelector(`.draggable-container:nth-child(${index + 1})`);
-                if (cardContainer) {
-                    const clonedCardContainer = cardContainer.cloneNode(true) as Element;
-                    clonedCardContainer.querySelectorAll('.drag-delete-buttons').forEach((el: Element) => el.remove()); // Remove drag-delete buttons
-                    previewContainer.appendChild(clonedCardContainer);
-                }
-            });
-        }
+        this.selectedCardIndices.forEach(index => {
+          const cardContainer = document.querySelector(`.draggable-container:nth-child(${index + 1})`);
+          if (cardContainer) {
+            const clonedCardContainer = cardContainer.cloneNode(true) as Element;
+            clonedCardContainer.querySelectorAll('.drag-delete-buttons').forEach((el: Element) => el.remove()); // Remove drag-delete buttons
+            previewContainer.appendChild(clonedCardContainer);
+          }
+        });
+      }
     } catch (error) {
-        console.error('Error:', error);
+      console.error('Error:', error);
     }
-}
+  }
 
   removeSelectedCardsFromPreview() {
     const previewContainer = document.querySelector('.preview');
@@ -233,8 +179,6 @@ isLastSelected(index: number): boolean {
       });
     }
   }
-
-  /////////////////////////////////////////////////////////////////////////////////
 
   constructor(private renderer: Renderer2) {}
 
@@ -250,7 +194,7 @@ isLastSelected(index: number): boolean {
       }
     });
   }
-  
+
   onDragEnded() {
     const selectedCardElements = document.querySelectorAll('.selected-card-dragging');
     selectedCardElements.forEach(element => {
@@ -262,53 +206,40 @@ isLastSelected(index: number): boolean {
       }
     });
   }
-  
-  
 
-/////////////////////////////////////////////////////////////////////////////////////////// 
+  drop(event: CdkDragDrop<string[]>) {
+    if (event.previousIndex !== event.currentIndex) {
+      console.log('Array order before moving:', this.cards.map(card => card.id));
 
-drop(event: CdkDragDrop<string[]>) {
-  if (event.previousIndex !== event.currentIndex) {
-    // Log the order of the array before moving the cards
-    console.log('Array order before moving:', this.cards.map(card => card.id));
+      // Create a copy of the selected cards
+      const selectedCards = this.selectedCardIndices.map(index => this.cards[index]);
 
-    // Create a copy of the selected cards
-    const selectedCards = this.selectedCardIndices.map(index => this.cards[index]);
+      // Remove the selected cards from the original array
+      this.selectedCardIndices.sort((a, b) => b - a); // Sort in descending order to prevent index shifting
+      this.selectedCardIndices.forEach(index => this.cards.splice(index, 1));
 
-    // Remove the selected cards from the original array
-    this.selectedCardIndices.sort((a, b) => b - a); // Sort in descending order to prevent index shifting
-    this.selectedCardIndices.forEach(index => this.cards.splice(index, 1));
+      // Calculate the adjusted drop position
+      const dropPosition = event.currentIndex < event.previousIndex ? event.currentIndex : event.currentIndex + 1 - selectedCards.length;
 
-    // Calculate the adjusted drop position
-    const dropPosition = event.currentIndex < event.previousIndex ? event.currentIndex : event.currentIndex + 1 - selectedCards.length;
+      // Insert the selected cards at the new location
+      this.cards.splice(dropPosition, 0, ...selectedCards);
 
-    // Insert the selected cards at the new location
-    this.cards.splice(dropPosition, 0, ...selectedCards);
+      // Update the selectedCardIndices array to reflect the new positions of the selected cards
+      this.selectedCardIndices = Array.from({ length: selectedCards.length }, (_, i) => dropPosition + i);
 
-    // Update the selectedCardIndices array to reflect the new positions of the selected cards
-    this.selectedCardIndices = Array.from({length: selectedCards.length}, (_, i) => dropPosition + i);
+      console.log('Array order after moving:', this.cards.map(card => card.id));
 
-    // Log the order of the array after moving the cards
-    console.log('Array order after moving:', this.cards.map(card => card.id));
+      // Clear selected state for all cards
+      this.cards.forEach(card => card.selected = false);
 
-    // Clear selected state for all cards
-    this.cards.forEach(card => card.selected = false);
-    
-    // Set selected state only for the dragged cards
-    this.selectedCardIndices.forEach(index => {
-      this.cards[index].selected = true;
-    });
+      // Set selected state only for the dragged cards
+      this.selectedCardIndices.forEach(index => {
+        this.cards[index].selected = true;
+      }); 
+    }
   }
-}
-
-
-
-
-  ///////////////////////////////////////////////
 
   addMoreCards() {
-    // Add logic to add more cards here
-    // For example, you can push new card objects into the cards array
     this.cards.push(
       { id: this.cards.length + 1, title: "New Slide", selected: false },
       // Add more cards as needed
