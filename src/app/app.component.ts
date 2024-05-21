@@ -28,7 +28,7 @@ export class AppComponent {
   ];
 
   selectMode = false;
-  selectOnClick = true; 
+  disableSelection = false;
 
   @HostListener('wheel', ['$event']) onMouseWheel(event: WheelEvent) {
     if (event.deltaY !== 0) {
@@ -52,6 +52,7 @@ export class AppComponent {
   lastSelectedIndex: number = -1;
 
   onSelectionChange(selectedItems: Card[]) {
+    this.selectMode = selectedItems.length > 1;
     
     // Preserve the selection state of previously selected cards
     const previouslySelectedIndices = this.selectedCardIndices.slice();
@@ -97,13 +98,14 @@ export class AppComponent {
 
     // Sort selectedCardIndices to ensure they are in ascending order based on their position in the cards array
     this.selectedCardIndices.sort((a, b) => a - b);
-
-    // Update selectMode based on the number of selected items
-    this.selectMode = selectedItems.length > 1;
   }
 
   areAnyCardsSelected(): boolean {
     return this.cards.some(card => card.selected);
+  }
+
+  severalCardsSelected(): boolean {
+    return this.selectedCardIndices.length > 1;
   }
 
   isFirstSelected(index: number): boolean {
@@ -126,6 +128,8 @@ export class AppComponent {
     // Clear selected indices array and update preview
     this.selectedCardIndices = [];
     // this.removeSelectedCardsFromPreview();
+
+    this.disableSelection = false;
   }
 
   cloneSelectedCardsToPreview() {
@@ -190,6 +194,7 @@ export class AppComponent {
         this.renderer.removeClass(deleteButton, 'hide-delete-button');
       }
     });
+    this.disableSelection = false;
   }
 
   drop(event: CdkDragDrop<string[]>) {
@@ -235,5 +240,13 @@ export class AppComponent {
       { id: this.cards.length + 1, title: "New Slide", selected: false },
       // Add more cards as needed
     );
+  }
+
+  onButtonMouseEnter() {
+    this.disableSelection = true;
+  }
+
+  onButtonMouseLeave() {
+    this.disableSelection = false;
   }
 }

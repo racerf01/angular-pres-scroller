@@ -2,11 +2,12 @@
   <dts-select-container 
     (select)="onSelectionChange($event)"
     [selectOnDrag]="true"
-    [selectOnClick]="selectOnClick" 
+    [selectOnClick]="true" 
     [dragOverItems]="false"
-    [selectMode]="selectMode"
+    [selectMode]="false"
     [custom]="true"
     [selectWithShortcut]="false"
+    [disabled]="disableSelection"
     style="position: absolute; height: 100%;">
     <div class="cards-container" cdkDropList cdkDropListOrientation="horizontal" (cdkDropListDropped)="drop($event)">
       <ng-container *ngFor="let card of cards; let i = index">
@@ -24,7 +25,7 @@
             <div class="card-content-container" style="position: relative;">
               <!-- Your card content here -->
             </div>
-            <div class="drag-delete-buttons" cdkDragHandle *ngIf="areAnyCardsSelected()">
+            <div class="drag-delete-buttons" cdkDragHandle *ngIf="areAnyCardsSelected()" (mouseenter)="onButtonMouseEnter()" (mouseleave)="onButtonMouseLeave()">
               <button class="dragButton"  *ngIf="isFirstSelected(i)">
                 <img class="dragButton-icon" src="assets/drag-button-icon.svg" style="width: 75%; height: 75%;">
               </button>
