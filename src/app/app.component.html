@@ -24,14 +24,14 @@
             <div class="card-content-container" style="position: relative;">
               <!-- Your card content here -->
             </div>
-            <div class="drag-delete-buttons" cdkDragHandle *ngIf="card.selected">
-              <button class="dragButton" *ngIf="firstSelectedIndex === i">
-                  <img class="dragButton-icon" src="assets/drag-button-icon.svg" style="width: 75%; height: 75%;">
+            <div class="drag-delete-buttons" cdkDragHandle *ngIf="areAnyCardsSelected()">
+              <button class="dragButton"  *ngIf="isFirstSelected(i)">
+                <img class="dragButton-icon" src="assets/drag-button-icon.svg" style="width: 75%; height: 75%;">
               </button>
-              <button class="deleteButton" *ngIf="lastSelectedIndex === i" (click)="deleteSelectedCards()">
-                  <img class="deleteButton-icon" src="assets/delete-button-icon.svg">
+              <button class="deleteButton" *ngIf="isLastSelected(i)" (click)="deleteSelectedCards()">
+                <img class="deleteButton-icon" src="assets/delete-button-icon.svg">
               </button>
-          </div>          
+            </div>
           </div>
           <div *cdkDragPreview>
             <div class="preview">

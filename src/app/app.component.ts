@@ -100,6 +100,10 @@ export class AppComponent {
     this.selectMode = selectedItems.length > 1;
   }
 
+  areAnyCardsSelected(): boolean {
+    return this.cards.some(card => card.selected);
+  }
+
   isFirstSelected(index: number): boolean {
       return index === this.firstSelectedIndex;
   }
@@ -162,15 +166,27 @@ export class AppComponent {
       const cardElement = document.querySelector(`.draggable-container:nth-child(${index + 1}) .card`);
       if (cardElement) {
         this.renderer.addClass(cardElement, 'selected-card-dragging');
+        
+        // Hide the delete button when dragging starts
+        const deleteButton = cardElement.querySelector('.deleteButton');
+        if (deleteButton) {
+          this.renderer.addClass(deleteButton, 'hide-delete-button');
+        }
       }
     });
   }
-
+  
   onDragEnded() {
     // Remove the opacity style and show the delete button when drag ends
     const selectedCardElements = document.querySelectorAll('.selected-card-dragging');
     selectedCardElements.forEach(element => {
       this.renderer.removeClass(element, 'selected-card-dragging');
+      
+      // Show the delete button
+      const deleteButton = element.querySelector('.deleteButton');
+      if (deleteButton) {
+        this.renderer.removeClass(deleteButton, 'hide-delete-button');
+      }
     });
   }
 
@@ -195,6 +211,10 @@ export class AppComponent {
       // Update the selectedCardIndices array to reflect the new positions of the selected cards
       this.selectedCardIndices = Array.from({length: selectedCards.length}, (_, i) => dropPosition + i);
   
+      // Update the first and last selected indices
+      this.firstSelectedIndex = Math.min(...this.selectedCardIndices);
+      this.lastSelectedIndex = Math.max(...this.selectedCardIndices);
+  
       // Log the order of the array after moving the cards
       console.log('Array order after moving:', this.cards.map(card => card.id));
   
@@ -206,7 +226,7 @@ export class AppComponent {
         this.cards[index].selected = true;
       });
     }
-  }
+  }  
 
   addMoreCards() {
     this.cards.push(
