@@ -51,73 +51,61 @@ export class AppComponent {
   lastSelectedIndex: number = -1;
 
   onSelectionChange(selectedItems: Card[]) {
-    this.selectedCardIndices = [];
-    this.firstSelectedIndex = -1;
-    this.lastSelectedIndex = -1;
+      // Preserve the selection state of previously selected cards
+      const previouslySelectedIndices = this.selectedCardIndices.slice();
 
-    // Preserve the selection state of previously selected cards
-    const previouslySelectedIndices = this.selectedCardIndices.slice();
+      // Clear the selectedCardIndices array
+      this.selectedCardIndices = [];
 
-    // Clear the selectedCardIndices array
-    this.selectedCardIndices = [];
+      // Set selected state to true for items that are selected
+      selectedItems.forEach((item: Card) => {
+          const index = this.cards.findIndex(card => card === item);
+          if (index !== -1) {
+              this.cards[index].selected = true;
+              if (!this.selectedCardIndices.includes(index)) {
+                  this.selectedCardIndices.push(index); // Add index to selectedCardIndices if not already present
+              }
+          }
+      });
 
-    this.updateSelectedCardIndices(selectedItems);
-
-    // Set selected state to true for items that are selected
-    selectedItems.forEach((item: Card, index: number) => {
-      const cardIndex = this.cards.findIndex(card => card === item);
-      if (cardIndex !== -1) {
-        this.selectedCardIndices.push(cardIndex);
-        this.cards[cardIndex].selected = true;
+      // Update first and last selected indices
+      if (this.selectedCardIndices.length > 0) {
+          this.firstSelectedIndex = Math.min(...this.selectedCardIndices);
+          this.lastSelectedIndex = Math.max(...this.selectedCardIndices);
+      } else {
+          this.firstSelectedIndex = -1;
+          this.lastSelectedIndex = -1;
       }
-    });
 
-    // Update first and last selected indices
-    if (this.selectedCardIndices.length > 0) {
-      this.firstSelectedIndex = Math.min(...this.selectedCardIndices);
-      this.lastSelectedIndex = Math.max(...this.selectedCardIndices);
-    }
+      // Remove deselected cards from the preview
+      this.removeSelectedCardsFromPreview();
 
-    // Remove deselected cards from the preview
-    this.removeSelectedCardsFromPreview();
+      // Clone selected cards to the preview
+      this.cloneSelectedCardsToPreview();
 
-    // Clone selected cards to the preview
-    this.cloneSelectedCardsToPreview();
-
-    // Update selectMode based on the number of selected items
-    this.selectMode = selectedItems.length > 1;
-
-    // Preserve the selection state of previously selected cards only if more than one card is selected
-    if (selectedItems.length > 1) {
-        previouslySelectedIndices.forEach(index => {
-            if (!this.selectedCardIndices.includes(index)) {
-                this.cards[index].selected = true;
-                this.selectedCardIndices.push(index);
-            }
-        });
-    }
-
-    // Sort selectedCardIndices to ensure they are in ascending order based on their position in the cards array
-    this.selectedCardIndices.sort((a, b) => a - b);
-
-  }
-
-  updateSelectedCardIndices(selectedItems: Card[]) {
-    this.selectedCardIndices = [];
-    selectedItems.forEach((item: Card) => {
-      const index = this.cards.findIndex(card => card === item);
-      if (index !== -1) {
-        this.selectedCardIndices.push(index);
+      // Preserve the selection state of previously selected cards only if more than one card is selected
+      if (selectedItems.length > 1) {
+          previouslySelectedIndices.forEach(index => {
+              if (!this.selectedCardIndices.includes(index)) {
+                  this.cards[index].selected = true;
+                  this.selectedCardIndices.push(index);
+              }
+          });
       }
-    });
+
+      // Sort selectedCardIndices to ensure they are in ascending order based on their position in the cards array
+      this.selectedCardIndices.sort((a, b) => a - b);
+
+      // Update selectMode based on the number of selected items
+      this.selectMode = selectedItems.length > 1;
   }
 
   isFirstSelected(index: number): boolean {
-    return index === this.firstSelectedIndex;
+      return index === this.firstSelectedIndex;
   }
 
   isLastSelected(index: number): boolean {
-    return index === this.lastSelectedIndex;
+      return index === this.lastSelectedIndex;
   }
 
   deleteSelectedCards() {
