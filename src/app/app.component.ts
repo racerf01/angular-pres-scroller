@@ -1,6 +1,8 @@
 import { Component, Renderer2, HostListener } from '@angular/core';
 import { CdkDragDrop, CdkDragStart } from '@angular/cdk/drag-drop';
-import 'smoothscroll-polyfill';
+import { gsap } from 'gsap';
+import { ScrollToPlugin } from 'gsap/ScrollToPlugin';
+gsap.registerPlugin(ScrollToPlugin);
 
 interface Card {
   id: number;
@@ -38,11 +40,15 @@ export class AppComponent {
   }
 
   private scrollHorizontally(deltaY: number) {
-    const element = document.querySelector('html'); // Select scrollable element by class or id
+    const element = document.documentElement; // Use document.documentElement for the root element
     if (element) {
-      element.scrollBy({
-        left: deltaY,
-        behavior: 'smooth'
+      const currentScrollLeft = element.scrollLeft;
+      const newScrollLeft = currentScrollLeft + deltaY;
+      
+      gsap.to(element, {
+        scrollTo: { x: newScrollLeft },
+        duration: 0.1, // Faster duration for quicker scroll
+        ease: 'power1.out' // Easing function for a quicker start and slower end
       });
     }
   }

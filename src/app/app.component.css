@@ -15,6 +15,7 @@
   margin-top: 18em; /* Add padding to keep cards away from edges */
   height: 4.2em;
   z-index: 0;
+  padding-right: 50vw;
 }
 
 .cards-selected {
